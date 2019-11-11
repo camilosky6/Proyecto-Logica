@@ -25,8 +25,8 @@ import java.awt.event.MouseEvent;
 public class VentanaPrincipal extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField txtFormula;
 	private JTable table;
+	private JLabel lblArea;
 
 	/**
 	 * Launch the application.
@@ -61,12 +61,12 @@ public class VentanaPrincipal extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		txtFormula = new JTextField();
+		JTextField txtFormula = new JTextField();
 		txtFormula.setBounds(12, 99, 947, 41);
 		contentPane.add(txtFormula);
 		txtFormula.setColumns(10);
 		
-		JLabel lblArea = new JLabel("Area entrada");
+		lblArea = new JLabel("Area entrada");
 		lblArea.setForeground(new Color(100, 149, 237));
 		lblArea.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblArea.setBounds(420, 54, 220, 32);
@@ -78,14 +78,14 @@ public class VentanaPrincipal extends JFrame {
 				dispose();
 			}
 		});
-		btnCerrar.setIcon(new ImageIcon("C:\\Users\\Danie\\Downloads\\cancel.png"));
+		btnCerrar.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/cancel.png")));
 		btnCerrar.setHorizontalAlignment(SwingConstants.CENTER);
 		btnCerrar.setBounds(932, 0, 56, 41);
 		contentPane.add(btnCerrar);
 		
 		JLabel informacion = new JLabel("");
 		informacion.setHorizontalAlignment(SwingConstants.CENTER);
-		informacion.setIcon(new ImageIcon("C:\\Users\\Danie\\Downloads\\info.png"));
+		informacion.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/info.png")));
 		informacion.setBounds(882, 0, 56, 41);
 		contentPane.add(informacion);
 		
@@ -95,7 +95,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(table);
 		
 		JLabel lblLinea = new JLabel("");
-		lblLinea.setIcon(new ImageIcon("C:\\Users\\Danie\\Downloads\\fondo-azul-claro.jpg"));
+		lblLinea.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-azul-claro.jpg")));
 		lblLinea.setBackground(new Color(135, 206, 250));
 		lblLinea.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLinea.setBounds(0, 0, 1000, 41);
@@ -107,12 +107,12 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JLabel label_5 = new JLabel("Atomos");
-		label_5.setHorizontalAlignment(SwingConstants.CENTER);
-		label_5.setFont(new Font("Tahoma", Font.BOLD, 20));
-		label_5.setForeground(new Color(100, 149, 237));
-		label_5.setBounds(145, 13, 110, 23);
-		panel.add(label_5);
+		JLabel label_1 = new JLabel("Atomos");
+		label_1.setHorizontalAlignment(SwingConstants.CENTER);
+		label_1.setFont(new Font("Tahoma", Font.BOLD, 20));
+		label_1.setForeground(new Color(100, 149, 237));
+		label_1.setBounds(145, 13, 110, 23);
+		panel.add(label_1);
 		
 		JLabel lblOperadores = new JLabel("Operadores");
 		lblOperadores.setHorizontalAlignment(SwingConstants.CENTER);
@@ -132,12 +132,12 @@ public class VentanaPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		btnIzquierda.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/iconos/left-arrow 36.png")));
+		btnIzquierda.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/izquierda.png")));
 		btnIzquierda.setBounds(351, 169, 70, 35);
 		panel.add(btnIzquierda);
 		
 		JButton btnDerecha = new JButton("");
-		btnDerecha.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/iconos/right-arrow (1).png")));
+		btnDerecha.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/derecha.png")));
 		btnDerecha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -146,7 +146,7 @@ public class VentanaPrincipal extends JFrame {
 		panel.add(btnDerecha);
 		
 		JButton btnAtras = new JButton("");
-		btnAtras.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/iconos/return (2).png")));
+		btnAtras.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/retroceder.png")));
 		btnAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -155,7 +155,7 @@ public class VentanaPrincipal extends JFrame {
 		panel.add(btnAtras);
 		
 		JButton btnAdelante = new JButton("");
-		btnAdelante.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/iconos/return (3).png")));
+		btnAdelante.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/adelantar.png")));
 		btnAdelante.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -268,10 +268,10 @@ public class VentanaPrincipal extends JFrame {
 		JLabel fondoComandos = new JLabel("");
 		fondoComandos.setBounds(12, 13, 953, 220);
 		panel.add(fondoComandos);
-		fondoComandos.setIcon(new ImageIcon("C:\\Users\\Danie\\Downloads\\plain-white-background.jpg"));
+		fondoComandos.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
 		
 		JLabel fondo = new JLabel("");
-		fondo.setIcon(new ImageIcon("C:\\Users\\Danie\\Downloads\\plain-white-background.jpg"));
+		fondo.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
 		fondo.setBounds(0, 42, 1000, 630);
 		contentPane.add(fondo);
 	}
