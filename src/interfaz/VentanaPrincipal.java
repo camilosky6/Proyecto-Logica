@@ -450,7 +450,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	}
 
 	public void insertarEntonces(String formula) {
-		String n = "()" + CONDICIONAL + "()";
+		String n = " () " + CONDICIONAL + " () ";
 		pos = txtFormula.getCaretPosition();
 		if (formula.equals("")) {
 
