@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextArea;
+import javax.swing.border.TitledBorder;
 
 public class VentanaPrincipal extends JFrame implements ActionListener {
 
@@ -79,7 +80,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		setBounds(100, 100, 1000, 650);
 		contentPane = new JPanel();
 		contentPane.setToolTipText("\r\n");
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
@@ -321,7 +322,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			insertarO(formula);
 		}
 		if (e.getSource() == btnVaciar) {
-
+			txtFormula.setText("");
 		}
 		if (e.getSource() == btnIzquierda) {
 
@@ -359,91 +360,111 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 	public void insertarNegacion(String formula) {
 		String n = NEGACION + "()";
+		pos = txtFormula.getCaretPosition();
 
 		if (formula.equals("")) {
 
-			txtFormula.setText(n);
+			pos += 2;
+			txtFormula.setText(n.trim());
+			txtFormula.setCaretPosition(pos);
+			txtFormula.requestFocus();
+			return;
 		} else {
-			txtFormula.setText(insertar(formula, n, txtFormula.getCaretPosition()));
+			txtFormula.setText(insertar(formula, n, pos));
 		}
-		System.out.println(pos + "antes");
-		pos += 2;
-		txtFormula.setCaretPosition(pos);
+		txtFormula.setCaretPosition(pos + 2);
+		txtFormula.requestFocus();
 		// txtFormula.moveCaretPosition(pos);
-		System.out.println(pos + "despues");
 	}
 
 	public void insertarY(String formula) {
-		String n = "()" + CONJUNCION + "()";
+		String n = " () " + CONJUNCION + " () ";
+		pos = txtFormula.getCaretPosition();
 
 		if (formula.equals("")) {
 
-			txtFormula.setText(n);
+			txtFormula.setText(n.trim());
+			pos += 1;
+			txtFormula.setCaretPosition(pos);
+			txtFormula.requestFocus();
+			return;
 		} else {
-			txtFormula.setText(insertar(formula, n, txtFormula.getCaretPosition()));
+			txtFormula.setText(insertar(formula, n, pos));
 		}
-		System.out.println(pos + "antes");
-		pos += 1;
+		pos += 2;
 		txtFormula.setCaretPosition(pos);
+		txtFormula.requestFocus();
 		// txtFormula.moveCaretPosition(pos);
-		System.out.println(pos + "despues");
 	}
 
 	public void insertarO(String formula) {
 
-		String n = "()" + DISYUNCION + "()";
-
+		String n = " () " + DISYUNCION + " () ";
+		pos = txtFormula.getCaretPosition();
 		if (formula.equals("")) {
 
-			txtFormula.setText(n);
+			txtFormula.setText(n.trim());
+			pos += 1;
+			txtFormula.setCaretPosition(pos);
+			txtFormula.requestFocus();
+			return;
 		} else {
-			txtFormula.setText(insertar(formula, n, txtFormula.getCaretPosition()));
+			txtFormula.setText(insertar(formula, n, pos));
 		}
-		pos += 1;
+		pos += 2;
 		txtFormula.setCaretPosition(pos);
-
+		txtFormula.requestFocus();
 	}
 
 	public void insertarAtomo(String formula, String atomo) {
-		char[] n=txtFormula.getText().toCharArray();
-    	if (formula.equals("")) {
-    		
-    		txtFormula.setText("("+atomo+")");
-    	} else if(n[pos-1]=='(' && n[pos]==')'){
-    		System.out.println(n[pos-1]+ "    "+n[pos]);
-    		txtFormula.setText(insertar(formula, atomo,txtFormula.getCaretPosition()));
-    	}
-    		
-    	pos += 1;
-    	txtFormula.setCaretPosition(pos);
+		char[] n = txtFormula.getText().toCharArray();
+		if (formula.equals("")) {
 
+			txtFormula.setText("(" + atomo + ")");
+		} else if (n[pos - 1] == '(' && n[pos] == ')') {
+			System.out.println(n[pos - 1] + "    " + n[pos]);
+			txtFormula.setText(insertar(formula, atomo, txtFormula.getCaretPosition()));
+		}
+
+		pos += 1;
+		txtFormula.setCaretPosition(pos);
+		txtFormula.requestFocus();
 	}
 
 	public void insertarSiSoloSi(String formula) {
-		String n = "()" + EQUIVALENCIA + "()";
-
+		String n = " () " + EQUIVALENCIA + " () ";
+		pos = txtFormula.getCaretPosition();
 		if (formula.equals("")) {
 
-			txtFormula.setText(n);
+			txtFormula.setText(n.trim());
+			pos += 1;
+			txtFormula.setCaretPosition(pos);
+			txtFormula.requestFocus();
+			return;
 		} else {
-			txtFormula.setText(insertar(formula, n, txtFormula.getCaretPosition()));
+			txtFormula.setText(insertar(formula, n, pos));
 		}
-		pos += 1;
+		pos += 2;
 		txtFormula.setCaretPosition(pos);
 
 	}
 
 	public void insertarEntonces(String formula) {
 		String n = "()" + CONDICIONAL + "()";
-
+		pos = txtFormula.getCaretPosition();
 		if (formula.equals("")) {
 
-			txtFormula.setText(n);
+			txtFormula.setText(n.trim());
+			pos += 1;
+			txtFormula.setCaretPosition(pos);
+			txtFormula.requestFocus();
+			return;
 		} else {
 			txtFormula.setText(insertar(formula, n, txtFormula.getCaretPosition()));
 		}
-		pos += 1;
+		pos += 2;
 		txtFormula.setCaretPosition(pos);
+		txtFormula.requestFocus();
 	}
 
 }
