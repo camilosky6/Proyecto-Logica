@@ -1,6 +1,5 @@
 package interfaz;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -11,8 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Color;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.CompoundBorder;
-import javax.swing.UIManager;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import java.awt.Font;
@@ -92,6 +89,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		txtFormula.setColumns(10);
 
 		lblArea = new JLabel("Area entrada");
+		txtFormula = new JTextField();
+		txtFormula.setBounds(12, 99, 947, 41);
+		contentPane.add(txtFormula);
+		txtFormula.setColumns(10);
+
+		JLabel lblArea = new JLabel("Area entrada");
 		lblArea.setForeground(new Color(100, 149, 237));
 		lblArea.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblArea.setBounds(420, 54, 220, 32);

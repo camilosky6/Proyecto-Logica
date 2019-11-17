@@ -2,9 +2,13 @@ package mundo;
 
 import java.util.ArrayList;
 
+import excepciones.ContinuasException;
+import excepciones.ParentesisException;
+import excepciones.ParentesisVacioException;
+
 public class Validaciones {
 
-	public boolean validacionLetrasContiguas(String formula) {
+	public boolean validacionLetrasContiguas(String formula) throws ContinuasException {
 		for (int i = 1; i < formula.length(); i++) {
 			char actual = formula.charAt(i);
 			if (Character.isLetter(actual)) {
@@ -15,7 +19,7 @@ public class Validaciones {
 						encontrado = true;
 					} else {
 						if (Character.isLetter(anterior)) {
-							return false;
+							throw new ContinuasException("Hay atomos contigüos en la premisa");
 						}
 					}
 				}
@@ -24,7 +28,7 @@ public class Validaciones {
 		return true;
 	}
 
-	public boolean verificarParentesis(String formula) {
+	public boolean verificarParentesis(String formula) throws ParentesisException {
 		int sum = 0;
 		for (int i = 0; i < formula.length(); i++) {
 			char actual = formula.charAt(i);
@@ -38,7 +42,7 @@ public class Validaciones {
 		if (sum == 0) {
 			return true;
 		} else {
-			return false;
+			throw new ParentesisException(formula);
 		}
 	}
 
@@ -55,7 +59,7 @@ public class Validaciones {
 		return true;
 	}
 
-	public boolean verificarPremisa(String formula) {
+	public boolean verificarPremisa(String formula) throws ContinuasException {
 		Proposiciones proposiciones = new Proposiciones();
 		proposiciones.modificarArbol(formula);
 		ArrayList<String> hojas = proposiciones.getArbolSubformula().getHojas();
@@ -69,13 +73,13 @@ public class Validaciones {
 		return true;
 	}
 
-	public boolean verificarParentesisVacios(String formula) {
+	public boolean verificarParentesisVacios(String formula) throws ParentesisVacioException {
 
 		for (int i = 0; i < formula.length(); i++) {
 			char actual = formula.charAt(i);
 			if (actual == '(') {
 				if (isVacio(formula, i + 1)) {
-					return false;
+					throw new ParentesisVacioException("Hay parentesis vacíos en la premisa");
 				}
 			}
 		}
