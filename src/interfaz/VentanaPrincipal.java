@@ -323,6 +323,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		}
 		if (e.getSource() == btnVaciar) {
 			txtFormula.setText("");
+			txtFormula.requestFocus();
 		}
 		if (e.getSource() == btnIzquierda) {
 
@@ -446,6 +447,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		}
 		pos += 2;
 		txtFormula.setCaretPosition(pos);
+		txtFormula.requestFocus();
 
 	}
 
