@@ -18,9 +18,12 @@ public class Logica {
 	public static void main(String[] args) {
 		String formula = "(p)∧((¬(p))∨(q)∧(¬(r))∧((¬(p))∨(¬(q))∨(r))";
 		String formula2 = "(p)∧((¬(p)))";
-		String prueba = "(¬((p)∧(q))↔((¬(p)∨(¬(q))";
+		String prueba = "((p)∨(q))↔(r)";
+		System.out.println(prueba);
 		String hola = fnc(prueba);
 		System.out.println(hola);
+		
+		/*
 		ArrayList<Clausula> clausulas = obtenerClausulas(formula);
 		ArrayList<Clausula> clausulas2 = obtenerClausulas(formula2);
 		resolucion(clausulas);
@@ -33,6 +36,7 @@ public class Logica {
 		resolucion(clausulas2,0);
 		System.out.println(clausulas);
 		System.out.println(clausulas2);
+		*/
 	}
 	
 	public boolean esOperador(char caracter) {
@@ -48,7 +52,7 @@ public class Logica {
      * dada una formula la lleva a FNC
      */
     private static String fnc(String entrada) {
-        int contador1 = 0;
+    	int contador1 = 0;
         String derecha = "", izquierda = "", tmp1 = "", iz, der;
         for (int i = 0; i < entrada.length(); i++) {
             if (entrada.charAt(i) == ')')
@@ -122,6 +126,86 @@ public class Logica {
     }
     
     /**
+     * remueve los conectores si y solo si y el entonces
+     */
+    public void quitarConectores() {
+        try {
+        	System.out.println("3");
+            String izquierdo = "", derecho = "", completo = "", entrada = this.entrada.getText();
+            for (int i = 0; i < entrada.length(); i++) {
+                if (entrada.charAt(i) == EQUIVALENCIA.charAt(0)) {
+                    int contador1 = 0;
+                    int contador2 = 0;
+                    for (int j = i - 1; j >= 0; j--) {
+                        if (entrada.charAt(j) == ')')
+                            contador1++;
+                        else if (entrada.charAt(j) == '(')
+                            contador1--;
+                        if (contador1 == 0) {
+                            izquierdo = entrada.substring(j, i);
+                            contador1 = j;
+                            break;
+                        }
+                    }
+                    for (int j = i + 1; j < entrada.length(); j++) {
+                        if (entrada.charAt(j) == '(')
+                            contador2++;
+                        else if (entrada.charAt(j) == ')')
+                            contador2--;
+                        if (contador2 == 0) {
+                            derecho = entrada.substring(i + 1, j + 1);
+                            contador2 = j;
+                            break;
+
+                        }
+                    }
+
+                    completo = "(" + izquierdo + DISYUNCION.charAt(0) + "(" + NEGACION + derecho + ")" + ")" +
+                            CONJUNCION + "(" + "(" + NEGACION + izquierdo + ")" +
+                            DISYUNCION + derecho + ")";
+                    entrada = entrada.substring(0, contador1) + completo + entrada.substring(contador2 + 1, entrada.length());
+                } else if (entrada.charAt(i) == CONDICIONAL.charAt(0)) {
+
+                    int contador1 = 0, contador2 = 0;
+
+                    for (int j = i - 1; j >= 0; j--) {
+                        if (entrada.charAt(j) == ')')
+                            contador1++;
+                        else if (entrada.charAt(j) == '(')
+                            contador1--;
+                        if (contador1 == 0) {
+                            izquierdo = entrada.substring(j, i);
+                            contador1 = j;
+                            break;
+                        }
+                    }
+                    for (int j = i + 1; j < entrada.length(); j++) {
+                        if (entrada.charAt(j) == '(')
+                            contador2++;
+                        else if (entrada.charAt(j) == ')')
+                            contador2--;
+                        if (contador2 == 0) {
+                            derecho = entrada.substring(i + 1, j + 1);
+                            contador2 = j;
+                            break;
+
+                        }
+                    }
+
+
+                    completo = "(" + NEGACION + izquierdo + ")" + DISYUNCION + derecho;
+                    entrada = entrada.substring(0, contador1) + completo + entrada.substring(contador2 + 1, entrada.length());
+
+
+                }
+            }
+            salida.setText(fnc(axiomas7y4(entrada)));
+        }catch (Exception g){
+            
+        }
+    }
+    
+    /**
      * retorna los lados de una ecuacion
      */
     private static ArrayList<String> getLados(String entrada) {
@@ -167,7 +251,90 @@ public class Logica {
         }
         return t;
     }
-	
+    /**
+     * aplica los axiomas 7 y 4 hasta que la formula quede libre de dobles neggaciones
+     */
+    private String axiomas7y4(String entrada) {
+    	System.out.println(2);
+        String izquierdo = "", derecho = "", completo = "", tmp = "";
+
+        while (comprobar(entrada)) {
+            for (int i = 0; i < entrada.length() - 2; i++) {
+                if (entrada.charAt(i + 2) != 'p' && entrada.charAt(i + 2) != 'q' && entrada.charAt(i + 2) != 'r' &&
+                        entrada.charAt(i + 2) != 's' && entrada.charAt(i + 2) != 't' &&
+                        entrada.charAt(i + 2) != NEGACION.charAt(0) &&
+                        entrada.charAt(i + 2) != 'v' && entrada.charAt(i) == NEGACION.charAt(0)) {
+                    int contador2 = 0;
+
+                    tmp = entrarNegacion(entrada, i);
+                    int c = 0;
+                    for (int j = 0; j < tmp.length(); j++) {
+                        if (tmp.charAt(j) == '(')
+                            contador2++;
+                        else if (tmp.charAt(j) == ')')
+                            contador2--;
+                        if (contador2 == 0) {
+                            izquierdo = tmp.substring(0, j + 1);
+                            contador2 = j;
+                            c = j;
+                            break;
+
+                        }
+                    }
+
+                    derecho = tmp.substring(c + 2, tmp.length());
+
+
+                    if (tmp.charAt(c + 1) == CONJUNCION.charAt(0)) {
+                        completo = "(" + NEGACION + izquierdo + ")" + DISYUNCION.charAt(0) +
+                                "(" + NEGACION + derecho + ")";
+                    } else
+                        completo = "(" + NEGACION + izquierdo + ")" + CONJUNCION.charAt(0) +
+                                "(" + NEGACION + derecho + ")";
+
+
+                    entrada = entrada.substring(0, i) + completo + entrada.substring(i + tmp.length() + 3, entrada.length());
+                } else if (entrada.charAt(i + 2) == NEGACION.charAt(0) &&
+                        entrada.charAt(i) == NEGACION.charAt(0)) {
+                    tmp = entrarNegacion(entrada, i);
+                    completo = tmp.substring(1, tmp.length());
+                    entrada = entrada.substring(0, i) + completo + entrada.substring(i + tmp.length() + 3, entrada.length());
+                }
+            }
+        }
+
+        return entrada;
+    }
+    
+    /**
+     * retorna la formula que se encuentra dentro de una negacion
+     */
+    private String entrarNegacion(String entrada, int i) {
+        int contador2 = 0;
+        for (int j = i + 1; j < entrada.length(); j++) {
+            if (entrada.charAt(j) == '(')
+                contador2++;
+            else if (entrada.charAt(j) == ')')
+                contador2--;
+            if (contador2 == 0) {
+                entrada = entrada.substring(i + 2, j);
+                break;
+            }
+        }
+        return entrada;
+    }
+    /**
+     * comprueba que no hallan formas atomicas para poder poner una nueva formula
+     */
+    private boolean comprobar(String entrada) {
+        boolean retorno = false;
+        for (int i = 0; i < entrada.length() - 2; i++) {
+            if (!esAtomo(entrada.charAt(i + 2))  && entrada.charAt(i) == NEGACION.charAt(0)) {
+                retorno = true;
+            }
+        }
+        return retorno;
+    }
 	
 	/********************************************************************************
 	                                  Resolucion
@@ -268,11 +435,5 @@ public class Logica {
 		}
 		return false;
 	}
-	
-	/*********************************************************************************
-                                         HISTORIAL
-    *********************************************************************************/
-	
-	
 
 }
