@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JTextArea;
 
 public class VentanaPrincipal extends JFrame implements ActionListener {
 
@@ -51,7 +52,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JButton btnEliminar;
 	private JTable table;
 	private JButton btnO;
-	
 
 	/**
 	 * Launch the application.
@@ -96,7 +96,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		lblArea.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblArea.setBounds(420, 54, 220, 32);
 		contentPane.add(lblArea);
-		
 
 		JLabel btnCerrar = new JLabel("");
 		btnCerrar.addMouseListener(new MouseAdapter() {
@@ -192,7 +191,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		btnO.setBounds(640, 49, 70, 35);
 		panel.add(btnO);
 
-		btnY = new JButton("∧");
+		btnY = new JButton("");
+		btnY.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/back.png")));
+		btnY.setSelectedIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/back.png")));
 		btnY.addActionListener(this);
 		btnY.setForeground(new Color(100, 149, 237));
 		btnY.setFont(new Font("Tahoma", Font.PLAIN, 22));
@@ -283,142 +284,163 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String formula = txtFormula.getText();
-		
+
 		if (e.getSource() == btnNegacion) {
 			insertarNegacion(formula);
 		}
 		if (e.getSource() == btnP) {
-			insertarAtomo(formula,"p");
+			insertarAtomo(formula, "(p)");
 		}
 		if (e.getSource() == btnQ) {
-			insertarAtomo(formula,"q");
+			insertarAtomo(formula, "(q)");
 		}
 		if (e.getSource() == btnR) {
-			insertarAtomo(formula,"r");
+			insertarAtomo(formula, "(r)");
 		}
 		if (e.getSource() == btnS) {
-			insertarAtomo(formula,"s");
+			insertarAtomo(formula, "(s)");
 		}
 		if (e.getSource() == btnT) {
-			insertarAtomo(formula,"t");
+			insertarAtomo(formula, "(t)");
 		}
-		
-		 if (e.getSource() == btnY) {
-			 insertarConjuncion(formula);	        
+
+		if (e.getSource() == btnY) {
+			insertarY(formula);
 		}
-			     
-		 if (e.getSource() == btnEntonces) { 
-		  insertarEntonces(formula);
-		  } 
-		  if (e.getSource() == btnSisoloSi) {
-		  insertarSiSoloSi(formula);
-		  } 
-		  if (e.getSource() == btnO) {
-			  insertarDisyuncion(formula);
-		  } 
-		  if (e.getSource() == btnVaciar) {
-		  
-		  } 
-		  if (e.getSource() == btnIzquierda) {
-		  
-		  } 
-		  if (e.getSource() == btnDerecha) {
-			  int aux = 1+ txtFormula.getCaretPosition();
-			  if (formula.length() > aux) {
-				   for (int i = aux; i < formula.length(); i++) {
-					if (formula.charAt(i) == ')' && !esAtomo(formula.charAt(i-1))) {
-						txtFormula.setCaretPosition(i);
-						break;
-					}
-				}
-			}
-		  } 
-		  if (e.getSource() == btnAtras) {
-		  
-		  } 
-		  if (e.getSource() == btnAgregar) {
-		  
-		  } 
-		  if (e.getSource() == btnAdelante) {
-		  
-		  } 
-		  if (e.getSource() == btnEliminar) {
-			  txtFormula.setText("");
-			  pos=0;
-		  
-		  }
-		 
+
+		if (e.getSource() == btnEntonces) {
+			insertarEntonces(formula);
+		}
+		if (e.getSource() == btnSisoloSi) {
+			insertarSiSoloSi(formula);
+		}
+		if (e.getSource() == btnO) {
+			insertarO(formula);
+		}
+		if (e.getSource() == btnVaciar) {
+
+		}
+		if (e.getSource() == btnIzquierda) {
+
+		}
+		if (e.getSource() == btnDerecha) {
+
+		}
+		if (e.getSource() == btnAtras) {
+
+		}
+		if (e.getSource() == btnAgregar) {
+
+		}
+		if (e.getSource() == btnAdelante) {
+
+		}
+		if (e.getSource() == btnEliminar) {
+			txtFormula.setText("");
+			pos = 0;
+
+		}
+
 	}
 
-private boolean esAtomo(char charAt) {
-		// TODO Auto-generated method stub
+	private boolean esAtomo(char charAt) {
+
 		return false;
 	}
 
-public String insertar(String formula, String ingreso, int n) {
+	public String insertar(String formula, String ingreso, int n) {
 		String salida = formula.substring(0, n) + ingreso + formula.substring(n);
 
 		return salida;
 	}
-public void insertarNegacion (String formula)
-{
-	String n = NEGACION + "()";
-	if (formula.equals("")) {
-		txtFormula.setText(n);
-	} else {
-		txtFormula.setText(insertar(formula, n, txtFormula.getCaretPosition()));
+
+	public void insertarNegacion(String formula) {
+		String n = NEGACION + "()";
+
+		if (formula.equals("")) {
+
+			txtFormula.setText(n);
+		} else {
+			txtFormula.setText(insertar(formula, n, txtFormula.getCaretPosition()));
+		}
+		System.out.println(pos + "antes");
+		pos += 2;
+		txtFormula.setCaretPosition(pos);
+		// txtFormula.moveCaretPosition(pos);
+		System.out.println(pos + "despues");
 	}
-	pos += 2+ txtFormula.getCaretPosition();
 
-}
-public void insertarConjuncion(String formula) {
-	String n = "()" + CONJUNCION + "()";
-    if (formula.equals("")) {
-        txtFormula.setText(n);
-    } else
-       txtFormula.setText(insertar(formula, n,txtFormula.getCaretPosition()));
-    pos += txtFormula.getCaretPosition()+1;
-}
-public void insertarAtomo(String formula,String atomo) {
-	 if (formula.equals("")) {
-         txtFormula.setText("(p)");
-     } else {
+	public void insertarY(String formula) {
+		String n = "()" + CONJUNCION + "()";
 
-         insertar(formula,atomo,txtFormula.getCaretPosition() );
-         pos += 1+ txtFormula.getCaretPosition();
-     }
-	
-}
-public void insertarSiSoloSi(String formula)
-{
-	        String n = "()" + EQUIVALENCIA+ "()";
-	        if (formula.equals("")) {
-	           txtFormula.setText(n);
+		if (formula.equals("")) {
 
-	        } else
-	         insertar(formula,n,txtFormula.getCaretPosition());
-	        pos += 1+txtFormula.getCaretPosition() ;
-	        
-}
-public void insertarEntonces(String formula)
-{
-          String n = "()" +CONDICIONAL + "()";
-          if (formula.equals("")) {
-              txtFormula.setText(n);
-          } else
-              insertar(formula,n,txtFormula.getCaretPosition());
-          pos += 1+txtFormula.getCaretPosition();      
-}
-public void insertarDisyuncion(String formula)
-{
-	
-        String n = "()" + DISYUNCION+ "()";
-        if (formula.equals("")) {
-            txtFormula.setText(n);
-        } else {
-          insertar(formula,n,txtFormula.getCaretPosition());
-        pos += 1+txtFormula.getCaretPosition();
-        }
-    
-}
+			txtFormula.setText(n);
+		} else {
+			txtFormula.setText(insertar(formula, n, txtFormula.getCaretPosition()));
+		}
+		System.out.println(pos + "antes");
+		pos += 1;
+		txtFormula.setCaretPosition(pos);
+		// txtFormula.moveCaretPosition(pos);
+		System.out.println(pos + "despues");
+	}
+
+	public void insertarO(String formula) {
+
+		String n = "()" + DISYUNCION + "()";
+
+		if (formula.equals("")) {
+
+			txtFormula.setText(n);
+		} else {
+			txtFormula.setText(insertar(formula, n, txtFormula.getCaretPosition()));
+		}
+		pos += 1;
+		txtFormula.setCaretPosition(pos);
+
+	}
+
+	public void insertarAtomo(String formula, String atomo) {
+		char[] n=txtFormula.getText().toCharArray();
+    	if (formula.equals("")) {
+    		
+    		txtFormula.setText("("+atomo+")");
+    	} else if(n[pos-1]=='(' && n[pos]==')'){
+    		System.out.println(n[pos-1]+ "    "+n[pos]);
+    		txtFormula.setText(insertar(formula, atomo,txtFormula.getCaretPosition()));
+    	}
+    		
+    	pos += 1;
+    	txtFormula.setCaretPosition(pos);
+
+	}
+
+	public void insertarSiSoloSi(String formula) {
+		String n = "()" + EQUIVALENCIA + "()";
+
+		if (formula.equals("")) {
+
+			txtFormula.setText(n);
+		} else {
+			txtFormula.setText(insertar(formula, n, txtFormula.getCaretPosition()));
+		}
+		pos += 1;
+		txtFormula.setCaretPosition(pos);
+
+	}
+
+	public void insertarEntonces(String formula) {
+		String n = "()" + CONDICIONAL + "()";
+
+		if (formula.equals("")) {
+
+			txtFormula.setText(n);
+		} else {
+			txtFormula.setText(insertar(formula, n, txtFormula.getCaretPosition()));
+		}
+		pos += 1;
+		txtFormula.setCaretPosition(pos);
+	}
+
 }
