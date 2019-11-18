@@ -24,12 +24,31 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.undo.UndoManager;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.undo.UndoManager;
+import javax.swing.ImageIcon;
+import javax.swing.JTable;
+import java.awt.Font;
+import java.awt.ScrollPane;
+
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Vector;
+
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
 
 import excepciones.ParentesisException;
 import mundo.Validaciones;
@@ -69,6 +88,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JButton btnO;
 	private JButton btnResolver;
 
+	private ArrayList<String>listaFormulas;
+	private JScrollPane scrollPane;
+	private DefaultTableModel modelotabla = new DefaultTableModel();
+	private JLabel lblProyectoLogica;
+
 	/**
 	 * Launch the application.
 	 */
@@ -89,10 +113,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal() {
-		setUndecorated(true);
+		
+		setUndecorated(false);
 		setAutoRequestFocus(false);
-		setResizable(false);
-		setLocationRelativeTo(null);
 		setTitle("Logica");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 650);
@@ -101,7 +124,24 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		lblProyectoLogica = new JLabel("Proyecto Logica");
+		lblProyectoLogica.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblProyectoLogica.setForeground(new Color(255, 255, 255));
+		lblProyectoLogica.setBounds(0, 13, 202, 28);
+		contentPane.add(lblProyectoLogica);
 
+		txtFormula = new JTextField();
+		txtFormula.setBounds(12, 99, 947, 41);
+		contentPane.add(txtFormula);
+		txtFormula.setColumns(10);
+		
+		JLabel lblListaDeFormulas = new JLabel("Lista de Formulas");
+		lblListaDeFormulas.setForeground(new Color(100, 149, 237));
+		lblListaDeFormulas.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblListaDeFormulas.setHorizontalAlignment(SwingConstants.CENTER);
+		lblListaDeFormulas.setBounds(211, 412, 590, 16);
+		contentPane.add(lblListaDeFormulas);
 		manager = new UndoManager();
 
 		txtFormula = new JTextField();
@@ -192,7 +232,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		lblArea.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblArea.setBounds(420, 54, 220, 32);
 		contentPane.add(lblArea);
-
+		listaFormulas=new ArrayList<>();
 		JLabel btnCerrar = new JLabel("");
 		btnCerrar.addMouseListener(new MouseAdapter() {
 
@@ -223,8 +263,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 		table = new JTable();
 		table.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		table.setBounds(12, 412, 976, 225);
+		table.setBounds(12, 430, 976, 207);
+		
 		contentPane.add(table);
+		modelotabla.addColumn("Lista Formulas");
+		table.setModel(modelotabla);
+		
+	
 
 		JLabel lblLinea = new JLabel("");
 		lblLinea.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-azul-claro.jpg")));
@@ -269,7 +314,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		btnDerecha = new JButton("");
 		btnDerecha.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/derecha.png")));
 		btnDerecha.addActionListener(this);
-		btnDerecha.setBounds(555, 138, 70, 35);
+		btnDerecha.setBounds(555, 137, 70, 35);
+
 		panel.add(btnDerecha);
 
 		btnAtras = new JButton("");
@@ -362,6 +408,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		btnAgregar.setForeground(new Color(100, 149, 237));
 		btnAgregar.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnAgregar.setBounds(420, 138, 124, 35);
+		
+
 		panel.add(btnAgregar);
 
 		btnEliminar = new JButton("Eliminar");
@@ -388,11 +436,17 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		fondoComandos.setBounds(12, 13, 953, 220);
 		panel.add(fondoComandos);
 		fondoComandos.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(-51, -124, 948, 168);
+		panel.add(scrollPane);
 
 		JLabel fondo = new JLabel("");
 		fondo.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
 		fondo.setBounds(0, 42, 1000, 630);
 		contentPane.add(fondo);
+		
+
 	}
 
 	@Override
@@ -502,7 +556,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 		}
 		if (e.getSource() == btnAgregar) {
-
+			agregarFormula(formula);
 		}
 		if (e.getSource() == btnAdelante) {
 			txtFormula.requestFocus();
@@ -672,5 +726,20 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		String currentDir = helper + "Impresión de página completa.pdf";
 		Runtime.getRuntime().exec(" rundll32 url.dll, FileProtocolHandler " + currentDir);
 	}
+
+
+
+	public void agregarFormula (String formula)
+{
+		listaFormulas.add(formula);
+		modelotabla.setRowCount(0);
+		for(int i=0;i<listaFormulas.size();i++)
+		{
+			Object[] fila = {listaFormulas.get(i)};
+			modelotabla.addRow(fila);
+		}
+		txtFormula.setText("");
+		pos=0;
+}
 
 }
