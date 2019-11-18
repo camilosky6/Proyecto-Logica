@@ -9,7 +9,7 @@ import excepciones.PremisaException;
 
 public class Validaciones {
 
-	public static boolean validacionLetrasContiguas(String formula) throws ContinuasException {
+	public static void validacionLetrasContiguas(String formula) throws ContinuasException {
 		for (int i = 1; i < formula.length(); i++) {
 			char actual = formula.charAt(i);
 			if (Character.isLetter(actual)) {
@@ -26,7 +26,6 @@ public class Validaciones {
 				}
 			}
 		}
-		return true;
 	}
 
 	public static boolean verificarParentesis(String formula) throws ParentesisException {
@@ -65,20 +64,28 @@ public class Validaciones {
 		return false;
 	}
 
-	public static void verificarPremisa(String formula) throws ContinuasException, PremisaException {
+	public static void verificarPremisa(String formula)
+			throws ContinuasException, PremisaException, ParentesisVacioException {
+
+		if (formula.isEmpty()) {
+			throw new PremisaException("La premisa no puede ser vacia");
+		}
+		System.out.println("Formula: + " + formula);
 		Proposiciones proposiciones = new Proposiciones();
-		proposiciones.modificarArbol(formula);
+		proposiciones.generarArbolSubformula(formula);
 		ArrayList<String> hojas = proposiciones.getArbolSubformula().getHojas();
 
 		for (int i = 0; i < hojas.size(); i++) {
-			if (!validacionLetrasContiguas(hojas.get(i)) && hojas.get(i).length() > 1 && formula.isEmpty()) {
+			validacionLetrasContiguas(hojas.get(i));
+			verificarParentesisVacios(formula);
+			if (hojas.get(i).length() > 1) {
 				throw new PremisaException("La premisa no es valida");
 			}
 		}
 
 	}
 
-	public static boolean verificarParentesisVacios(String formula) throws ParentesisVacioException {
+	public static void verificarParentesisVacios(String formula) throws ParentesisVacioException {
 
 		for (int i = 0; i < formula.length(); i++) {
 			char actual = formula.charAt(i);
@@ -88,7 +95,6 @@ public class Validaciones {
 				}
 			}
 		}
-		return true;
 	}
 
 	private static boolean isVacio(String formula, int pos) {

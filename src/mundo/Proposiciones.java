@@ -56,7 +56,7 @@ public class Proposiciones {
 	 * @param formula String que se va a evaluar.
 	 * @throws IOException Si no se halla el txt con los operadores.
 	 */
-	public void generarArbolSubformula(String formula) throws IOException {
+	public void generarArbolSubformula(String formula) {
 		arbolSubformula.setRaiz(modificarArbol(formula));
 	}
 
@@ -79,7 +79,10 @@ public class Proposiciones {
 			char aux = formula.charAt(pos);
 			String[] operadores = getOperadores();
 			Nodo nodo = new Nodo(formula);
-			if (aux == operadores[0].charAt(1)) {
+			if (isOperador(aux) == false) {
+				return nodo;
+			}
+			if (aux == operadores[0].charAt(0)) {
 				nodo.setIzquierdo(modificarArbol(eliminarParentesisUnario(formula, pos)));
 			} else {
 				nodo.setIzquierdo(modificarArbol(eliminarParentesisBinarios(formula, pos)));

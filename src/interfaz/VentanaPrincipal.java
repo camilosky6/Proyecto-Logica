@@ -52,6 +52,7 @@ import javax.swing.JScrollPane;
 
 import excepciones.ContinuasException;
 import excepciones.ParentesisException;
+import excepciones.ParentesisVacioException;
 import excepciones.PremisaException;
 import mundo.Validaciones;
 
@@ -133,11 +134,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		lblProyectoLogica.setBounds(0, 13, 202, 28);
 		contentPane.add(lblProyectoLogica);
 
-		txtFormula = new JTextField();
-		txtFormula.setBounds(12, 99, 947, 41);
-		contentPane.add(txtFormula);
-		txtFormula.setColumns(10);
-
 		JLabel lblListaDeFormulas = new JLabel("Lista de Formulas");
 		lblListaDeFormulas.setForeground(new Color(100, 149, 237));
 		lblListaDeFormulas.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -217,9 +213,16 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 					txtFormula.setText(actual);
 					return;
 				} else {
-					if (actual.charAt(pos - 1) != '(' || actual.charAt(pos) != ')') {
-						mostrarError("El nuevo atomo no se encontraría entre paréntesis");
-						txtFormula.setText(actual);
+					if (!actual.isEmpty()) {
+						if (pos - 1 > 0) {
+							if (actual.charAt(pos - 1) != '(' || actual.charAt(pos) != ')') {
+								mostrarError("El nuevo atomo no se encontraría entre paréntesis");
+								txtFormula.setText(actual);
+							}
+						} else {
+							mostrarError("El nuevo atomo no se encontraría entre paréntesis");
+							txtFormula.setText(actual);
+						}
 					}
 
 				}
@@ -556,7 +559,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		if (e.getSource() == btnAgregar) {
 			try {
 				agregarFormula(formula);
-			} catch (ContinuasException | PremisaException e1) {
+			} catch (ContinuasException | PremisaException | ParentesisVacioException e1) {
 				// TODO Auto-generated catch block
 				mostrarError(e1.getMessage());
 			}
@@ -730,7 +733,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		Runtime.getRuntime().exec(" rundll32 url.dll, FileProtocolHandler " + currentDir);
 	}
 
-	public void agregarFormula(String formula) throws ContinuasException, PremisaException {
+	public void agregarFormula(String formula) throws ContinuasException, PremisaException, ParentesisVacioException {
 
 		try {
 			Validaciones.verificarPremisa(formula);
@@ -740,6 +743,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		} catch (PremisaException e) {
 			// TODO Auto-generated catch block
 			throw new PremisaException(e.getMessage());
+		} catch (ParentesisVacioException e) {
+			// TODO Auto-generated catch block
+			throw new ParentesisVacioException(e.getMessage());
 		}
 		listaFormulas.add(formula);
 		modelotabla.setRowCount(0);

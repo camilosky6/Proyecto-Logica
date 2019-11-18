@@ -151,6 +151,7 @@ public class Arbol {
 	}
 
 	public ArrayList<String> getHojas(Nodo raiz, ArrayList<String> hojas) {
+		System.out.println(raiz.getValor());
 		if (raiz.isHoja()) {
 			hojas.add(raiz.getValor());
 			return hojas;
