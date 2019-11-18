@@ -62,6 +62,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JButton btnEliminar;
 	private JTable table;
 	private JButton btnO;
+	private JButton btnResolver;
 
 	/**
 	 * Launch the application.
@@ -167,34 +168,35 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		panel.add(lblOperadores);
 
 		JLabel label = new JLabel("Comandos");
+		label.setHorizontalAlignment(SwingConstants.CENTER);
 		label.setForeground(new Color(100, 149, 237));
 		label.setFont(new Font("Tahoma", Font.BOLD, 20));
-		label.setBounds(423, 129, 116, 27);
+		label.setBounds(420, 98, 124, 27);
 		panel.add(label);
 
 		btnIzquierda = new JButton("");
 		btnIzquierda.addActionListener(this);
 		btnIzquierda.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/izquierda.png")));
-		btnIzquierda.setBounds(351, 169, 70, 35);
+		btnIzquierda.setBounds(337, 137, 70, 35);
 		panel.add(btnIzquierda);
 
 		btnDerecha = new JButton("");
 		btnDerecha.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/derecha.png")));
 		btnDerecha.addActionListener(this);
-		btnDerecha.setBounds(538, 169, 70, 35);
+		btnDerecha.setBounds(555, 138, 70, 35);
 		panel.add(btnDerecha);
 
 		btnAtras = new JButton("");
 		btnAtras.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/retroceder.png")));
 		btnAtras.addActionListener(this);
-		btnAtras.setBounds(269, 169, 70, 35);
+		btnAtras.setBounds(255, 137, 70, 35);
 		panel.add(btnAtras);
 
 		btnAdelante = new JButton("");
 		btnAdelante.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/adelantar.png")));
 		btnAdelante.addActionListener(this);
 
-		btnAdelante.setBounds(620, 169, 70, 35);
+		btnAdelante.setBounds(637, 138, 70, 35);
 		panel.add(btnAdelante);
 
 		btnNegacion = new JButton("\u00AC");
@@ -273,22 +275,28 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		btnAgregar.addActionListener(this);
 		btnAgregar.setForeground(new Color(100, 149, 237));
 		btnAgregar.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnAgregar.setBounds(433, 169, 93, 35);
+		btnAgregar.setBounds(420, 138, 124, 35);
 		panel.add(btnAgregar);
 
 		btnEliminar = new JButton("Eliminar");
 		btnEliminar.addActionListener(this);
 		btnEliminar.setForeground(new Color(100, 149, 237));
 		btnEliminar.setFont(new Font("Tahoma", Font.BOLD, 15));
-		btnEliminar.setBounds(702, 169, 103, 35);
+		btnEliminar.setBounds(719, 138, 103, 35);
 		panel.add(btnEliminar);
 
 		btnVaciar = new JButton("Vaciar");
 		btnVaciar.addActionListener(this);
 		btnVaciar.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnVaciar.setForeground(new Color(100, 149, 237));
-		btnVaciar.setBounds(158, 169, 97, 35);
+		btnVaciar.setBounds(144, 137, 97, 35);
 		panel.add(btnVaciar);
+		
+		btnResolver = new JButton("Resolver");
+		btnResolver.setForeground(new Color(100, 149, 237));
+		btnResolver.setFont(new Font("Tahoma", Font.BOLD, 15));
+		btnResolver.setBounds(337, 185, 288, 35);
+		panel.add(btnResolver);
 
 		JLabel fondoComandos = new JLabel("");
 		fondoComandos.setBounds(12, 13, 953, 220);
