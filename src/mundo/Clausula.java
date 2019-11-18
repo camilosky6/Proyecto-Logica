@@ -75,15 +75,36 @@ public class Clausula {
 		return posicion;
 	}
 	
-
-	public void eliminarAtomosComplementariosDe(String p) {
-		
+	public void darAtomos(Clausula list,String p) {
+		for (int i = 0; i < literales.size(); i++) {
+			if (!list.contiene(literales.get(i)) && !literales.get(i).getLiteral().equals(p)) {
+				list.getLiterales().add(literales.get(i));
+			}
+		}
 	}
+	/**
+	public void eliminarAtomosComplementariosDe(String p) {
+		Atomo token = new Atomo(true, p);
+		Atomo token2 = new Atomo(false, p);
+		for (Atomo atomo : literales) {
+			if (atomo.esComplementario(token)) {
+				literales.remove(atomo);
+			}
+		}
+		for (Atomo atomo : literales) {
+			if (atomo.esComplementario(token2)) {
+				literales.remove(atomo);
+			}
+		}
+	}
+	**/
+	
 	
 	private Atomo obtenerAtomo(boolean negacion, String p) {
-		for (int i = 0; i < literales.size(); i++) {
-			if (literales.get(i).getLiteral() == p && literales.get(i).getNegacion() == negacion) {
-				return literales.get(i);
+		for (Atomo atomo : literales) {
+			System.out.println(atomo);
+			if (atomo.getLiteral() == p && atomo.getNegacion() == negacion) {
+				return atomo;
 			}
 		}
 		return null;

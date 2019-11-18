@@ -91,8 +91,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JButton btnO;
 	private JButton btnResolver;
 
+<<<<<<< Updated upstream
 	private ArrayList<String> listaFormulas;
 	private JScrollPane scrollPane;
+=======
+	private ArrayList<String>listaFormulas;
+>>>>>>> Stashed changes
 	private DefaultTableModel modelotabla = new DefaultTableModel();
 	private JLabel lblProyectoLogica;
 
@@ -133,7 +137,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		lblProyectoLogica.setForeground(new Color(255, 255, 255));
 		lblProyectoLogica.setBounds(0, 13, 202, 28);
 		contentPane.add(lblProyectoLogica);
+<<<<<<< Updated upstream
 
+=======
+		
+>>>>>>> Stashed changes
 		JLabel lblListaDeFormulas = new JLabel("Lista de Formulas");
 		lblListaDeFormulas.setForeground(new Color(100, 149, 237));
 		lblListaDeFormulas.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -438,10 +446,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		fondoComandos.setBounds(12, 13, 953, 220);
 		panel.add(fondoComandos);
 		fondoComandos.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
+<<<<<<< Updated upstream
 
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(-51, -124, 948, 168);
 		panel.add(scrollPane);
+=======
+>>>>>>> Stashed changes
 
 		JLabel fondo = new JLabel("");
 		fondo.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));

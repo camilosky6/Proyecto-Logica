@@ -34,7 +34,7 @@ public class Atomo {
 	}
 
 	public boolean esIgual(Atomo atomo) {
-		if (atomo.getNegacion() == negacion && atomo.getLiteral().equals(literal)) {
+		if (atomo.getNegacion() == negacion && atomo.getLiteral()==(literal)) {
 			return true;
 		}
 		return false;
