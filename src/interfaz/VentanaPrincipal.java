@@ -50,7 +50,9 @@ import java.util.Vector;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 
+import excepciones.ContinuasException;
 import excepciones.ParentesisException;
+import excepciones.PremisaException;
 import mundo.Validaciones;
 
 public class VentanaPrincipal extends JFrame implements ActionListener {
@@ -88,7 +90,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JButton btnO;
 	private JButton btnResolver;
 
-	private ArrayList<String>listaFormulas;
+	private ArrayList<String> listaFormulas;
 	private JScrollPane scrollPane;
 	private DefaultTableModel modelotabla = new DefaultTableModel();
 	private JLabel lblProyectoLogica;
@@ -113,7 +115,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal() {
-		
+
 		setUndecorated(false);
 		setAutoRequestFocus(false);
 		setTitle("Logica");
@@ -124,7 +126,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		lblProyectoLogica = new JLabel("Proyecto Logica");
 		lblProyectoLogica.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblProyectoLogica.setForeground(new Color(255, 255, 255));
@@ -135,7 +137,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		txtFormula.setBounds(12, 99, 947, 41);
 		contentPane.add(txtFormula);
 		txtFormula.setColumns(10);
-		
+
 		JLabel lblListaDeFormulas = new JLabel("Lista de Formulas");
 		lblListaDeFormulas.setForeground(new Color(100, 149, 237));
 		lblListaDeFormulas.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -232,7 +234,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		lblArea.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblArea.setBounds(420, 54, 220, 32);
 		contentPane.add(lblArea);
-		listaFormulas=new ArrayList<>();
+		listaFormulas = new ArrayList<>();
 		JLabel btnCerrar = new JLabel("");
 		btnCerrar.addMouseListener(new MouseAdapter() {
 
@@ -264,12 +266,10 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		table = new JTable();
 		table.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		table.setBounds(12, 430, 976, 207);
-		
+
 		contentPane.add(table);
 		modelotabla.addColumn("Lista Formulas");
 		table.setModel(modelotabla);
-		
-	
 
 		JLabel lblLinea = new JLabel("");
 		lblLinea.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-azul-claro.jpg")));
@@ -408,7 +408,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		btnAgregar.setForeground(new Color(100, 149, 237));
 		btnAgregar.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnAgregar.setBounds(420, 138, 124, 35);
-		
 
 		panel.add(btnAgregar);
 
@@ -436,7 +435,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		fondoComandos.setBounds(12, 13, 953, 220);
 		panel.add(fondoComandos);
 		fondoComandos.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
-		
+
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(-51, -124, 948, 168);
 		panel.add(scrollPane);
@@ -445,7 +444,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		fondo.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
 		fondo.setBounds(0, 42, 1000, 630);
 		contentPane.add(fondo);
-		
 
 	}
 
@@ -556,7 +554,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 		}
 		if (e.getSource() == btnAgregar) {
-			agregarFormula(formula);
+			try {
+				agregarFormula(formula);
+			} catch (ContinuasException | PremisaException e1) {
+				// TODO Auto-generated catch block
+				mostrarError(e1.getMessage());
+			}
 		}
 		if (e.getSource() == btnAdelante) {
 			txtFormula.requestFocus();
@@ -727,19 +730,24 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		Runtime.getRuntime().exec(" rundll32 url.dll, FileProtocolHandler " + currentDir);
 	}
 
+	public void agregarFormula(String formula) throws ContinuasException, PremisaException {
 
-
-	public void agregarFormula (String formula)
-{
+		try {
+			Validaciones.verificarPremisa(formula);
+		} catch (ContinuasException e) {
+			// TODO Auto-generated catch block
+			throw new ContinuasException(e.getMessage());
+		} catch (PremisaException e) {
+			// TODO Auto-generated catch block
+			throw new PremisaException(e.getMessage());
+		}
 		listaFormulas.add(formula);
 		modelotabla.setRowCount(0);
-		for(int i=0;i<listaFormulas.size();i++)
-		{
-			Object[] fila = {listaFormulas.get(i)};
+		for (int i = 0; i < listaFormulas.size(); i++) {
+			Object[] fila = { listaFormulas.get(i) };
 			modelotabla.addRow(fila);
 		}
 		txtFormula.setText("");
-		pos=0;
-}
-
+		pos = 0;
+	}
 }

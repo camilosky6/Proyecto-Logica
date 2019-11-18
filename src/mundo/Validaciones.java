@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import excepciones.ContinuasException;
 import excepciones.ParentesisException;
 import excepciones.ParentesisVacioException;
+import excepciones.PremisaException;
 
 public class Validaciones {
 
@@ -64,18 +65,17 @@ public class Validaciones {
 		return false;
 	}
 
-	public static boolean verificarPremisa(String formula) throws ContinuasException {
+	public static void verificarPremisa(String formula) throws ContinuasException, PremisaException {
 		Proposiciones proposiciones = new Proposiciones();
 		proposiciones.modificarArbol(formula);
 		ArrayList<String> hojas = proposiciones.getArbolSubformula().getHojas();
 
 		for (int i = 0; i < hojas.size(); i++) {
-			if (!validacionLetrasContiguas(hojas.get(i)) && hojas.get(i).length() > 1) {
-				return false;
+			if (!validacionLetrasContiguas(hojas.get(i)) && hojas.get(i).length() > 1 && formula.isEmpty()) {
+				throw new PremisaException("La premisa no es valida");
 			}
 		}
 
-		return true;
 	}
 
 	public static boolean verificarParentesisVacios(String formula) throws ParentesisVacioException {
