@@ -729,7 +729,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	public void abrirPDF() throws IOException {
 		File file = new File("");
 		String helper = file.getAbsolutePath() + "\\src\\";
-		String currentDir = helper + "Impresión de página completa.pdf";
+		String currentDir = helper + "MANUAL DE USUARIO-convertido.pdf";
 		Runtime.getRuntime().exec(" rundll32 url.dll, FileProtocolHandler " + currentDir);
 	}
 
