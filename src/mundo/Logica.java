@@ -19,9 +19,7 @@ public class Logica {
 		String formula = "(p)∧((¬(p))∨(q)∧(¬(r))∧((¬(p))∨(¬(q))∨(r))";
 		String formula2 = "(p)∧((¬(p)))";
 		String prueba = "((p)∨(q))↔(r)";
-		System.out.println(prueba);
-		String hola = fnc(prueba);
-		System.out.println(hola);
+		realizarFNC(prueba);
 		
 		/*
 		ArrayList<Clausula> clausulas = obtenerClausulas(formula);
@@ -38,7 +36,7 @@ public class Logica {
 		System.out.println(clausulas2);
 		*/
 	}
-	
+
 	public boolean esOperador(char caracter) {
 		if (caracter == '¬' || caracter == '∨' || caracter == '∧' || caracter == '→' || caracter == '↔') {
 			return true;
@@ -121,17 +119,16 @@ public class Logica {
 
         }
 
-        System.out.println(tmp1);
+       // System.out.println(tmp1);
         return tmp1;
     }
     
     /**
      * remueve los conectores si y solo si y el entonces
      */
-    public void quitarConectores() {
+    public static void realizarFNC(String entrada) {
         try {
-        	System.out.println("3");
-            String izquierdo = "", derecho = "", completo = "", entrada = this.entrada.getText();
+            String izquierdo = "", derecho = "", completo = "";
             for (int i = 0; i < entrada.length(); i++) {
                 if (entrada.charAt(i) == EQUIVALENCIA.charAt(0)) {
                     int contador1 = 0;
@@ -199,7 +196,8 @@ public class Logica {
 
                 }
             }
-            salida.setText(fnc(axiomas7y4(entrada)));
+            //salida
+            System.out.println(fnc(axiomas7y4(entrada)));
         }catch (Exception g){
             
         }
@@ -254,8 +252,7 @@ public class Logica {
     /**
      * aplica los axiomas 7 y 4 hasta que la formula quede libre de dobles neggaciones
      */
-    private String axiomas7y4(String entrada) {
-    	System.out.println(2);
+    private static String axiomas7y4(String entrada) {
         String izquierdo = "", derecho = "", completo = "", tmp = "";
 
         while (comprobar(entrada)) {
@@ -309,7 +306,7 @@ public class Logica {
     /**
      * retorna la formula que se encuentra dentro de una negacion
      */
-    private String entrarNegacion(String entrada, int i) {
+    private static String entrarNegacion(String entrada, int i) {
         int contador2 = 0;
         for (int j = i + 1; j < entrada.length(); j++) {
             if (entrada.charAt(j) == '(')
@@ -326,7 +323,7 @@ public class Logica {
     /**
      * comprueba que no hallan formas atomicas para poder poner una nueva formula
      */
-    private boolean comprobar(String entrada) {
+    private static boolean comprobar(String entrada) {
         boolean retorno = false;
         for (int i = 0; i < entrada.length() - 2; i++) {
             if (!esAtomo(entrada.charAt(i + 2))  && entrada.charAt(i) == NEGACION.charAt(0)) {
