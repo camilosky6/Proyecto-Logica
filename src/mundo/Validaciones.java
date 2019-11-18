@@ -8,7 +8,7 @@ import excepciones.ParentesisVacioException;
 
 public class Validaciones {
 
-	public boolean validacionLetrasContiguas(String formula) throws ContinuasException {
+	public static boolean validacionLetrasContiguas(String formula) throws ContinuasException {
 		for (int i = 1; i < formula.length(); i++) {
 			char actual = formula.charAt(i);
 			if (Character.isLetter(actual)) {
@@ -28,7 +28,7 @@ public class Validaciones {
 		return true;
 	}
 
-	public boolean verificarParentesis(String formula) throws ParentesisException {
+	public static boolean verificarParentesis(String formula) throws ParentesisException {
 		int sum = 0;
 		for (int i = 0; i < formula.length(); i++) {
 			char actual = formula.charAt(i);
@@ -42,11 +42,11 @@ public class Validaciones {
 		if (sum == 0) {
 			return true;
 		} else {
-			throw new ParentesisException(formula);
+			throw new ParentesisException("No hay el mismo número de parentesis izquierdos y derechos en la fórmula");
 		}
 	}
 
-	public boolean verificarAtomos(String formula) {
+	public static boolean verificarAtomos(String formula) {
 		for (int i = 0; i < formula.length(); i++) {
 			char actual = formula.charAt(i);
 			if (!Character.isLetter(actual) && !Character.isWhitespace(actual)) {
@@ -59,7 +59,7 @@ public class Validaciones {
 		return true;
 	}
 
-	public boolean verificarPremisa(String formula) throws ContinuasException {
+	public static boolean verificarPremisa(String formula) throws ContinuasException {
 		Proposiciones proposiciones = new Proposiciones();
 		proposiciones.modificarArbol(formula);
 		ArrayList<String> hojas = proposiciones.getArbolSubformula().getHojas();
@@ -73,12 +73,12 @@ public class Validaciones {
 		return true;
 	}
 
-	public boolean verificarParentesisVacios(String formula) throws ParentesisVacioException {
+	public static boolean verificarParentesisVacios(String formula) throws ParentesisVacioException {
 
 		for (int i = 0; i < formula.length(); i++) {
 			char actual = formula.charAt(i);
 			if (actual == '(') {
-				if (isVacio(formula, i + 1)) {
+				if (!isVacio(formula, i + 1)) {
 					throw new ParentesisVacioException("Hay parentesis vacíos en la premisa");
 				}
 			}
@@ -86,10 +86,10 @@ public class Validaciones {
 		return true;
 	}
 
-	private boolean isVacio(String formula, int pos) {
+	private static boolean isVacio(String formula, int pos) {
 
 		boolean encontrado = false;
-		for (int i = pos; i < formula.length() || encontrado == false; i++) {
+		for (int i = pos; i < formula.length() && encontrado == false; i++) {
 			char actual = formula.charAt(i);
 			if (actual == '(') {
 				encontrado = true;

@@ -1,36 +1,48 @@
 package interfaz;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
 import java.awt.Color;
-import javax.swing.border.BevelBorder;
-import javax.swing.ImageIcon;
-import javax.swing.JTable;
+import java.awt.EventQueue;
 import java.awt.Font;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.JTextArea;
-import javax.swing.border.TitledBorder;
+
+import javax.swing.Action;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.CannotUndoException;
+import javax.swing.undo.UndoManager;
+import javax.swing.undo.UndoableEdit;
+
+import excepciones.ParentesisException;
 
 public class VentanaPrincipal extends JFrame implements ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public static final String NEGACION = "¬";
 	public static final String CONJUNCION = "∧";
 	public static final String DISYUNCION = "∨";
 	public static final String CONDICIONAL = "→";
 	public static final String EQUIVALENCIA = "↔";
+	private UndoManager manager;
 	private int pos = 0;
 	private JPanel contentPane;
-	private JLabel lblArea;
 	private JButton btnNegacion;
 	private JTextField txtFormula;
 	private JButton btnP;
@@ -84,16 +96,20 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
+		manager = new UndoManager();
+
 		txtFormula = new JTextField();
 		txtFormula.setBounds(12, 99, 947, 41);
 		contentPane.add(txtFormula);
 		txtFormula.setColumns(10);
 
-		lblArea = new JLabel("Area entrada");
+		new JLabel("Area entrada");
 		txtFormula = new JTextField();
 		txtFormula.setBounds(12, 99, 947, 41);
 		contentPane.add(txtFormula);
 		txtFormula.setColumns(10);
+
+		txtFormula.getDocument().addUndoableEditListener(manager);
 
 		JLabel lblArea = new JLabel("Area entrada");
 		lblArea.setForeground(new Color(100, 149, 237));
@@ -291,21 +307,48 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 		if (e.getSource() == btnNegacion) {
 			insertarNegacion(formula);
+
 		}
 		if (e.getSource() == btnP) {
-			insertarAtomo(formula, "(p)");
+			try {
+				insertarAtomo(formula, "p");
+			} catch (ParentesisException e1) {
+				// TODO Auto-generated catch block
+				mostratError(e1.getMessage());
+			}
 		}
 		if (e.getSource() == btnQ) {
-			insertarAtomo(formula, "(q)");
+			try {
+				insertarAtomo(formula, "q");
+			} catch (ParentesisException e1) {
+				// TODO Auto-generated catch block
+				mostratError(e1.getMessage());
+			}
 		}
 		if (e.getSource() == btnR) {
-			insertarAtomo(formula, "(r)");
+			try {
+				insertarAtomo(formula, "r");
+			} catch (ParentesisException e1) {
+				// TODO Auto-generated catch block
+				mostratError(e1.getMessage());
+			}
 		}
 		if (e.getSource() == btnS) {
-			insertarAtomo(formula, "(s)");
+			try {
+				insertarAtomo(formula, "s");
+
+			} catch (ParentesisException e1) {
+				// TODO Auto-generated catch block
+				mostratError(e1.getMessage());
+			}
 		}
 		if (e.getSource() == btnT) {
-			insertarAtomo(formula, "(t)");
+			try {
+				insertarAtomo(formula, "t");
+			} catch (ParentesisException e1) {
+				// TODO Auto-generated catch block
+				mostratError(e1.getMessage());
+			}
 		}
 
 		if (e.getSource() == btnY) {
@@ -326,19 +369,26 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			txtFormula.requestFocus();
 		}
 		if (e.getSource() == btnIzquierda) {
-
+			txtFormula.setCaretPosition(posicionCaretAnterior(formula, txtFormula.getCaretPosition()));
+			txtFormula.requestFocus();
 		}
 		if (e.getSource() == btnDerecha) {
-
+			txtFormula.setCaretPosition(posicionCaretSiguiente(formula, txtFormula.getCaretPosition()));
+			txtFormula.requestFocus();
 		}
 		if (e.getSource() == btnAtras) {
+			txtFormula.requestFocus();
+			Action deshacer = new Deshacer(manager);
+			deshacer.actionPerformed(e);
 
 		}
 		if (e.getSource() == btnAgregar) {
 
 		}
 		if (e.getSource() == btnAdelante) {
-
+			txtFormula.requestFocus();
+			Action rehacer = new Rehacer(manager);
+			rehacer.actionPerformed(e);
 		}
 		if (e.getSource() == btnEliminar) {
 			txtFormula.setText("");
@@ -402,6 +452,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 		String n = " () " + DISYUNCION + " () ";
 		pos = txtFormula.getCaretPosition();
+
 		if (formula.equals("")) {
 
 			txtFormula.setText(n.trim());
@@ -417,18 +468,18 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		txtFormula.requestFocus();
 	}
 
-	public void insertarAtomo(String formula, String atomo) {
+	public void insertarAtomo(String formula, String atomo) throws ParentesisException {
 		char[] n = txtFormula.getText().toCharArray();
+		pos = txtFormula.getCaretPosition();
 		if (formula.equals("")) {
 
-			txtFormula.setText("(" + atomo + ")");
+			txtFormula.setText(atomo);
 		} else if (n[pos - 1] == '(' && n[pos] == ')') {
-			System.out.println(n[pos - 1] + "    " + n[pos]);
 			txtFormula.setText(insertar(formula, atomo, txtFormula.getCaretPosition()));
+		} else {
+			throw new ParentesisException("El nuevo átomo no esta entre parentésis");
 		}
-
-		pos += 1;
-		txtFormula.setCaretPosition(pos);
+		txtFormula.setCaretPosition(pos + 1);
 		txtFormula.requestFocus();
 	}
 
@@ -467,6 +518,34 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		pos += 2;
 		txtFormula.setCaretPosition(pos);
 		txtFormula.requestFocus();
+	}
+
+	public void mostratError(String msg) {
+		JOptionPane.showMessageDialog(null, msg, "Error", JOptionPane.WARNING_MESSAGE);
+	}
+
+	public int posicionCaretSiguiente(String formula, int pos) {
+		for (int i = pos; i < formula.length() - 1; i++) {
+			char actual = formula.charAt(i);
+			char siguiente = formula.charAt(i + 1);
+			if (actual == '(' && siguiente == ')') {
+				return i + 1;
+			}
+
+		}
+		return 0;
+	}
+
+	public int posicionCaretAnterior(String formula, int pos) {
+		for (int i = pos; i > 1; i--) {
+			char actual = formula.charAt(i);
+			char siguiente = formula.charAt(i - 1);
+			if (actual == ')' && siguiente == '(') {
+				return i;
+			}
+
+		}
+		return 0;
 	}
 
 }
