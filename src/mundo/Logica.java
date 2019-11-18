@@ -16,25 +16,20 @@ public class Logica {
 	 */
 	
 	public static void main(String[] args) {
-		String formula = "(p)∧((¬(p))∨(q)∧(¬(r))∧((¬(p))∨(¬(q))∨(r))";
-		String formula2 = "(p)∧((¬(p)))";
-		String prueba = "((p)∨(q))↔(r)";
-		realizarFNC(prueba);
+		//( ( ( (r) ∨ (¬(s)) ) ∧ ( ( (r) ∨ (¬(s)) ) ∨ (s) ) ) ∧ ( (¬(r)) ∨ (¬(s)) ) ) ∧ ( ( (¬(r)) ∨ (¬(s)) ) ∨ (s) )
+		String prueba = "¬((p)∧((q)→(r)))";
+		System.out.println(prueba);
+		prueba = realizarFNC(prueba);
+		System.out.println(prueba);
 		
-		/*
-		ArrayList<Clausula> clausulas = obtenerClausulas(formula);
-		ArrayList<Clausula> clausulas2 = obtenerClausulas(formula2);
+		ArrayList<Clausula> clausulas = obtenerClausulas(prueba);
+		ArrayList<Clausula> c2 = obtenerClausulas(prueba);
+		System.out.println(clausulas);
 		resolucion(clausulas);
-		resolucion(clausulas2);
 		System.out.println(clausulas);
-		System.out.println(clausulas2);
-		clausulas = obtenerClausulas(formula);
-		clausulas2 = obtenerClausulas(formula2);
-		resolucion(clausulas,0);
-		resolucion(clausulas2,0);
-		System.out.println(clausulas);
-		System.out.println(clausulas2);
-		*/
+		
+		resolucion(c2, 0);
+		System.out.println(c2);
 	}
 
 	public boolean esOperador(char caracter) {
@@ -126,7 +121,7 @@ public class Logica {
     /**
      * remueve los conectores si y solo si y el entonces
      */
-    public static void realizarFNC(String entrada) {
+    public static String realizarFNC(String entrada) {
         try {
             String izquierdo = "", derecho = "", completo = "";
             for (int i = 0; i < entrada.length(); i++) {
@@ -198,8 +193,9 @@ public class Logica {
             }
             //salida
             System.out.println(fnc(axiomas7y4(entrada)));
+            return fnc(axiomas7y4(entrada));
         }catch (Exception g){
-            
+            return null;
         }
     }
     
@@ -352,14 +348,16 @@ public class Logica {
 	}
     
     private static void resolucion(ArrayList<Clausula> clausulas,int j) {
-		if (j< clausulas.size() && !(clausulas.get(j).estaUsada())) {
+		if (j< clausulas.size()) {
 			for (int i = 0; i < clausulas.size(); i++) {
-				if (i!=j && tienenParComplementario(clausulas.get(j),clausulas.get(i))) {
-					Clausula aux = comprobarRes(clausulas.get(j),clausulas.get(i),clausulas.size());
-					clausulas.get(j).setEstado(true);
-					clausulas.get(i).setEstado(true);
-					clausulas.add(aux);
-					resolucion(clausulas,j+1);
+				if (j< clausulas.size() && !(clausulas.get(j).estaUsada())) {
+					if (i!=j && tienenParComplementario(clausulas.get(j),clausulas.get(i))) {
+						Clausula aux = comprobarRes(clausulas.get(j),clausulas.get(i),clausulas.size());
+						clausulas.get(j).setEstado(true);
+						clausulas.get(i).setEstado(true);
+						clausulas.add(aux);
+						resolucion(clausulas, j+1);
+					}
 				}
 			}
 		}
@@ -369,11 +367,12 @@ public class Logica {
 		String p = obtenerParComplementario(token, token2);
 		ArrayList<Atomo> aux = new ArrayList<>();
 		Clausula salida = new Clausula(false, aux, "", pos);
-		token.darAtomos(salida);
-		token2.darAtomos(salida);
+		token.darAtomos(salida,p);
+		token2.darAtomos(salida,p);
+		System.out.println(salida);
 		//TODO: modificar posicion despues, ver si es util o no
 		salida.esResolucionDe(p, token.getPosicion(), token2.getPosicion());
-		salida.eliminarAtomosComplementariosDe(p);
+		System.out.println(salida);
 		return salida;
 	}
 
@@ -405,7 +404,7 @@ public class Logica {
 	 */
 	private static ArrayList<Clausula> obtenerClausulas(String formula) {
 		ArrayList<Clausula> aux = new ArrayList<>();
-		String[] arreglo = formula.split(CONJUNCION);
+		String[] arreglo = formula.trim().split(CONJUNCION);
 		for (int i = 0; i < arreglo.length; i++) {
 			ArrayList<Atomo> literales = new ArrayList<>();
 			Clausula clausula = new Clausula(false, literales, Clausula.PREMISA, i);
