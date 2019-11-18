@@ -59,6 +59,11 @@ public class Validaciones {
 		return true;
 	}
 
+	public static boolean isAtomo() {
+
+		return false;
+	}
+
 	public static boolean verificarPremisa(String formula) throws ContinuasException {
 		Proposiciones proposiciones = new Proposiciones();
 		proposiciones.modificarArbol(formula);

@@ -3,10 +3,18 @@ package interfaz;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.RenderingHints.Key;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.Action;
 import javax.swing.ImageIcon;
@@ -17,17 +25,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.undo.CannotRedoException;
-import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoManager;
-import javax.swing.undo.UndoableEdit;
 
 import excepciones.ParentesisException;
+import mundo.Validaciones;
 
 public class VentanaPrincipal extends JFrame implements ActionListener {
 
@@ -103,14 +108,84 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		txtFormula.setBounds(12, 99, 947, 41);
 		contentPane.add(txtFormula);
 		txtFormula.setColumns(10);
+		txtFormula.addMouseListener(new MouseListener() {
 
-		new JLabel("Area entrada");
-		txtFormula = new JTextField();
-		txtFormula.setBounds(12, 99, 947, 41);
-		contentPane.add(txtFormula);
-		txtFormula.setColumns(10);
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				String texto = txtFormula.getText();
+				int pos = txtFormula.getCaretPosition();
+				if (pos > 0) {
+					if (texto.charAt(pos - 1) == '(' && texto.charAt(pos) == ')') {
+						return;
+					}
+				}
+				txtFormula.setCaretPosition(posicionCaretSiguiente(texto, 0));
+
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+		});
+
+		txtFormula.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				// TODO Auto-generated method stub
+				String actual = txtFormula.getText();
+				int pos = txtFormula.getCaretPosition();
+				if (!Character.isLetter(arg0.getKeyChar())) {
+
+					if (arg0.getKeyCode() == 8) {
+						actual += " ";
+					}
+					mostrarError("La tecla ingresada no corresponde a una letra");
+					txtFormula.setText(actual);
+					return;
+				} else {
+					if (actual.charAt(pos - 1) != '(' || actual.charAt(pos) != ')') {
+						mostrarError("El nuevo atomo no se encontraría entre paréntesis");
+						txtFormula.setText(actual);
+					}
+
+				}
+			}
+		});
 
 		txtFormula.getDocument().addUndoableEditListener(manager);
+		new JLabel("Area entrada");
 
 		JLabel lblArea = new JLabel("Area entrada");
 		lblArea.setForeground(new Color(100, 149, 237));
@@ -120,6 +195,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 		JLabel btnCerrar = new JLabel("");
 		btnCerrar.addMouseListener(new MouseAdapter() {
+
 			public void mouseClicked(MouseEvent arg0) {
 				dispose();
 			}
@@ -129,11 +205,21 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		btnCerrar.setBounds(932, 0, 56, 41);
 		contentPane.add(btnCerrar);
 
-		JLabel informacion = new JLabel("");
-		informacion.setHorizontalAlignment(SwingConstants.CENTER);
-		informacion.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/info.png")));
-		informacion.setBounds(882, 0, 56, 41);
-		contentPane.add(informacion);
+		JLabel btnInformacion = new JLabel("");
+		btnInformacion.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent arg0) {
+				try {
+					abrirPDF();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					mostrarError("No se ha podido abrir el documento");
+				}
+			}
+		});
+		btnInformacion.setHorizontalAlignment(SwingConstants.CENTER);
+		btnInformacion.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/info.png")));
+		btnInformacion.setBounds(882, 0, 56, 41);
+		contentPane.add(btnInformacion);
 
 		table = new JTable();
 		table.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -291,7 +377,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		btnVaciar.setForeground(new Color(100, 149, 237));
 		btnVaciar.setBounds(144, 137, 97, 35);
 		panel.add(btnVaciar);
-		
+
 		btnResolver = new JButton("Resolver");
 		btnResolver.setForeground(new Color(100, 149, 237));
 		btnResolver.setFont(new Font("Tahoma", Font.BOLD, 15));
@@ -314,7 +400,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		String formula = txtFormula.getText();
 
 		if (e.getSource() == btnNegacion) {
-			insertarNegacion(formula);
+			try {
+				insertarNegacion(formula);
+			} catch (ParentesisException e1) {
+				// TODO Auto-generated catch block
+				mostrarError(e1.getMessage());
+			}
 
 		}
 		if (e.getSource() == btnP) {
@@ -322,7 +413,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 				insertarAtomo(formula, "p");
 			} catch (ParentesisException e1) {
 				// TODO Auto-generated catch block
-				mostratError(e1.getMessage());
+				mostrarError(e1.getMessage());
 			}
 		}
 		if (e.getSource() == btnQ) {
@@ -330,7 +421,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 				insertarAtomo(formula, "q");
 			} catch (ParentesisException e1) {
 				// TODO Auto-generated catch block
-				mostratError(e1.getMessage());
+				mostrarError(e1.getMessage());
 			}
 		}
 		if (e.getSource() == btnR) {
@@ -338,7 +429,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 				insertarAtomo(formula, "r");
 			} catch (ParentesisException e1) {
 				// TODO Auto-generated catch block
-				mostratError(e1.getMessage());
+				mostrarError(e1.getMessage());
 			}
 		}
 		if (e.getSource() == btnS) {
@@ -347,7 +438,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 			} catch (ParentesisException e1) {
 				// TODO Auto-generated catch block
-				mostratError(e1.getMessage());
+				mostrarError(e1.getMessage());
 			}
 		}
 		if (e.getSource() == btnT) {
@@ -355,22 +446,42 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 				insertarAtomo(formula, "t");
 			} catch (ParentesisException e1) {
 				// TODO Auto-generated catch block
-				mostratError(e1.getMessage());
+				mostrarError(e1.getMessage());
 			}
 		}
 
 		if (e.getSource() == btnY) {
-			insertarY(formula);
+			try {
+				insertarY(formula);
+			} catch (ParentesisException e1) {
+				// TODO Auto-generated catch block
+				mostrarError(e1.getMessage());
+			}
 		}
 
 		if (e.getSource() == btnEntonces) {
-			insertarEntonces(formula);
+			try {
+				insertarEntonces(formula);
+			} catch (ParentesisException e1) {
+				// TODO Auto-generated catch block
+				mostrarError(e1.getMessage());
+			}
 		}
 		if (e.getSource() == btnSisoloSi) {
-			insertarSiSoloSi(formula);
+			try {
+				insertarSiSoloSi(formula);
+			} catch (ParentesisException e1) {
+				// TODO Auto-generated catch block
+				mostrarError(e1.getMessage());
+			}
 		}
 		if (e.getSource() == btnO) {
-			insertarO(formula);
+			try {
+				insertarO(formula);
+			} catch (ParentesisException e1) {
+				// TODO Auto-generated catch block
+				mostrarError(e1.getMessage());
+			}
 		}
 		if (e.getSource() == btnVaciar) {
 			txtFormula.setText("");
@@ -406,18 +517,19 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 	}
 
-	private boolean esAtomo(char charAt) {
+	public String insertar(String formula, String ingreso, int n) throws ParentesisException {
 
-		return false;
+		if (formula.charAt(pos - 1) == '(' && formula.charAt(pos) == ')') {
+			String salida = formula.substring(0, n) + ingreso + formula.substring(n);
+			txtFormula.setCaretPosition(posicionCaretSiguiente(formula, n));
+			return salida;
+		} else {
+			throw new ParentesisException("El nuevo operador no se encuentra dentro de parentésis");
+		}
+
 	}
 
-	public String insertar(String formula, String ingreso, int n) {
-		String salida = formula.substring(0, n) + ingreso + formula.substring(n);
-
-		return salida;
-	}
-
-	public void insertarNegacion(String formula) {
+	public void insertarNegacion(String formula) throws ParentesisException {
 		String n = NEGACION + "()";
 		pos = txtFormula.getCaretPosition();
 
@@ -436,7 +548,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		// txtFormula.moveCaretPosition(pos);
 	}
 
-	public void insertarY(String formula) {
+	public void insertarY(String formula) throws ParentesisException {
 		String n = " () " + CONJUNCION + " () ";
 		pos = txtFormula.getCaretPosition();
 
@@ -456,13 +568,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		// txtFormula.moveCaretPosition(pos);
 	}
 
-	public void insertarO(String formula) {
+	public void insertarO(String formula) throws ParentesisException {
 
 		String n = " () " + DISYUNCION + " () ";
 		pos = txtFormula.getCaretPosition();
-
 		if (formula.equals("")) {
-
 			txtFormula.setText(n.trim());
 			pos += 1;
 			txtFormula.setCaretPosition(pos);
@@ -487,11 +597,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		} else {
 			throw new ParentesisException("El nuevo átomo no esta entre parentésis");
 		}
-		txtFormula.setCaretPosition(pos + 1);
+		txtFormula.setCaretPosition(posicionCaretSiguiente(formula, pos) + 1);
 		txtFormula.requestFocus();
 	}
 
-	public void insertarSiSoloSi(String formula) {
+	public void insertarSiSoloSi(String formula) throws ParentesisException {
 		String n = " () " + EQUIVALENCIA + " () ";
 		pos = txtFormula.getCaretPosition();
 		if (formula.equals("")) {
@@ -510,7 +620,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 	}
 
-	public void insertarEntonces(String formula) {
+	public void insertarEntonces(String formula) throws ParentesisException {
 		String n = " () " + CONDICIONAL + " () ";
 		pos = txtFormula.getCaretPosition();
 		if (formula.equals("")) {
@@ -528,7 +638,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		txtFormula.requestFocus();
 	}
 
-	public void mostratError(String msg) {
+	public void mostrarError(String msg) {
 		JOptionPane.showMessageDialog(null, msg, "Error", JOptionPane.WARNING_MESSAGE);
 	}
 
@@ -545,7 +655,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	}
 
 	public int posicionCaretAnterior(String formula, int pos) {
-		for (int i = pos; i > 1; i--) {
+		for (int i = pos - 1; i > 1; i--) {
 			char actual = formula.charAt(i);
 			char siguiente = formula.charAt(i - 1);
 			if (actual == ')' && siguiente == '(') {
@@ -554,6 +664,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 		}
 		return 0;
+	}
+
+	public void abrirPDF() throws IOException {
+		File file = new File("");
+		String helper = file.getAbsolutePath() + "\\src\\";
+		String currentDir = helper + "Impresión de página completa.pdf";
+		Runtime.getRuntime().exec(" rundll32 url.dll, FileProtocolHandler " + currentDir);
 	}
 
 }
