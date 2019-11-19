@@ -67,7 +67,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	public static final String EQUIVALENCIA = "↔";
 	private UndoManager manager;
 	private int pos = 0;
-	private JPanel contentPane;
+	private JPanel contentPane, panel2;
 	private JButton btnNegacion;
 	private JTextField txtFormula;
 	private JButton btnP;
@@ -136,13 +136,20 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 650);
 		
+		//panel 2
+		panel2 = new JPanel();
+		panel2.setToolTipText("\r\n");
+		panel2.setBorder(new EmptyBorder(0, 0, 0, 0));
+		setContentPane(panel2);
+		panel2.setLayout(null);
+		panel2.setVisible(false);
+		
 		//panel 1
 		contentPane = new JPanel();
 		contentPane.setToolTipText("\r\n");
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
 
 		lblProyectoLogica = new JLabel("Proyecto Logica");
 		lblProyectoLogica.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -477,6 +484,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		btnResolver.setForeground(new Color(100, 149, 237));
 		btnResolver.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnResolver.setBounds(337, 185, 288, 35);
+		btnResolver.addActionListener(this);
 		panel.add(btnResolver);
 
 		JLabel fondoComandos = new JLabel("");
@@ -625,6 +633,14 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			txtFormula.setText("");
 			pos = 0;
 
+		}
+		
+		//muestra la resolucion del problema
+		if (e.getSource() == btnResolver) {
+			if (panel2.isVisible()) {
+				contentPane.setVisible(true);
+				panel2.setVisible(false);
+			}
 		}
 	}
 	
