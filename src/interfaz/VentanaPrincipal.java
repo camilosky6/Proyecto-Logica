@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.Action;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -52,7 +53,10 @@ import excepciones.ContinuasException;
 import excepciones.ParentesisException;
 import excepciones.ParentesisVacioException;
 import excepciones.PremisaException;
+import mundo.Clausula;
+import mundo.Logica;
 import mundo.Validaciones;
+import javax.swing.JList;
 
 public class VentanaPrincipal extends JFrame implements ActionListener {
 
@@ -67,7 +71,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	public static final String EQUIVALENCIA = "↔";
 	private UndoManager manager;
 	private int pos = 0;
-	private JPanel contentPane, panel2;
+	private JPanel contentPane;
 	private JButton btnNegacion;
 	private JTextField txtFormula;
 	private JButton btnP;
@@ -90,7 +94,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JButton btnResolver;
 
 
-	private ArrayList<String> listaFormulas;
+	private ArrayList<String> listaFormulas;//Formulas que se ingresan
+	private ArrayList<Clausula> listaClausulas;//lista de clausulas
 
 	private JScrollPane scrollPane;
 	
@@ -105,6 +110,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JLabel lblOperadores;
 	private JLabel lblListaDeFormulas;
 	private JPanel panel;
+	private JPanel panel_1;
+	private JTextField textConjuntoFormulas;
+	private JButton btnPanel;
+	private JLabel lblMetodoDeSatisfacibilidad;
+	private JList jListaResolucion;
 
 	/**
 	 * Launch the application.
@@ -136,20 +146,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 650);
 		
-		//panel 2
-		panel2 = new JPanel();
-		panel2.setToolTipText("\r\n");
-		panel2.setBorder(new EmptyBorder(0, 0, 0, 0));
-		setContentPane(panel2);
-		panel2.setLayout(null);
-		panel2.setVisible(false);
-		
 		//panel 1
 		contentPane = new JPanel();
 		contentPane.setToolTipText("\r\n");
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+
 
 		lblProyectoLogica = new JLabel("Proyecto Logica");
 		lblProyectoLogica.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -332,6 +335,39 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		lblLinea.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLinea.setBounds(0, 0, 982, 41);
 		contentPane.add(lblLinea);
+		
+		panel_1 = new JPanel();
+		panel_1.setBounds(0, 42, 982, 561);
+		contentPane.add(panel_1);
+		panel_1.setVisible(false);
+		panel_1.setLayout(null);
+		
+		textConjuntoFormulas = new JTextField();
+		textConjuntoFormulas.setEditable(false);
+		textConjuntoFormulas.setBounds(69, 64, 891, 30);
+		panel_1.add(textConjuntoFormulas);
+		textConjuntoFormulas.setColumns(10);
+		
+		btnPanel = new JButton("SALIDA");
+		btnPanel.addActionListener(this);
+		btnPanel.setBounds(27, 11, 150, 30);
+		panel_1.add(btnPanel);
+		
+		lblMetodoDeSatisfacibilidad = new JLabel("METODO DE SATISFACIBILIDAD POR RESOLUCION");
+		lblMetodoDeSatisfacibilidad.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMetodoDeSatisfacibilidad.setForeground(new Color(100, 149, 237));
+		lblMetodoDeSatisfacibilidad.setFont(new Font("Tahoma", Font.BOLD, 29));
+		lblMetodoDeSatisfacibilidad.setBounds(187, 11, 773, 32);
+		panel_1.add(lblMetodoDeSatisfacibilidad);
+		
+		JLabel label_1 = new JLabel("");
+		label_1.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
+		label_1.setBounds(0, 0, 982, 561);
+		panel_1.add(label_1);
+		
+		jListaResolucion = new JList();
+		jListaResolucion.setBounds(69, 105, 891, 434);
+		panel_1.add(jListaResolucion);
 
 		panel = new JPanel();
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -481,10 +517,10 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		panel.add(btnVaciar);
 
 		btnResolver = new JButton("Resolver");
+		btnResolver.addActionListener(this);
 		btnResolver.setForeground(new Color(100, 149, 237));
 		btnResolver.setFont(new Font("Tahoma", Font.BOLD, 15));
 		btnResolver.setBounds(337, 185, 288, 35);
-		btnResolver.addActionListener(this);
 		panel.add(btnResolver);
 
 		JLabel fondoComandos = new JLabel("");
@@ -634,17 +670,82 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			pos = 0;
 
 		}
-		
-		//muestra la resolucion del problema
-		if (e.getSource() == btnResolver) {
-			if (panel2.isVisible()) {
-				contentPane.setVisible(true);
-				panel2.setVisible(false);
-			}
+
+		//Devolverse a ingresar premisas
+		if (e.getSource() == btnPanel) {
+			panel_1.setVisible(false);
+			mostrarPanel();
 		}
+		
+		//Hacer satisfacibilidad
+		if (e.getSource() == btnResolver) {
+			hacerResolucion();
+			llenarResolucion();
+			panel_1.setVisible(true);
+			ocultarPanel();
+		}
+		
+	}
+
+	/********************************************************************************
+	                           Genera la resolucion
+	 *******************************************************************************/
+	private void hacerResolucion() {
+		listaClausulas = new ArrayList<>();
+		for (String formula : listaFormulas) {
+			String aux = formula.trim();
+			aux = aux.replace(" ", "");
+			System.out.println(aux);
+			aux = Logica.realizarFNC(aux);
+			ArrayList<Clausula> clausulas = Logica.obtenerClausulas(aux);
+			Logica.ingresarClausulas(listaClausulas, clausulas);
+		}
+		textConjuntoFormulas.setText(listaClausulas.toString());
+		Logica.resolucion(listaClausulas);
 	}
 	
+	private void llenarResolucion() {
+		DefaultListModel modelo = new DefaultListModel<>();
+		jListaResolucion.setModel(modelo);
+		for (int i = 0; i < listaClausulas.size(); i++) {
+			//TODO: imprimir si es hipotesis o resolucion
+			String salida = ((i+1)+"  "+listaClausulas.get(i)+ "   "+ listaClausulas.get(i).getComentario());
+			modelo.addElement(salida);	
+		}
+	}
+
+	//Oculta los elementos del panel
+	private void ocultarPanel() {
+		table.setVisible(false);
+		lblListaDeFormulas.setVisible(false);
+		lblArea.setVisible(false);
+		btnResolver.setVisible(false);
+		txtFormula.setVisible(false);
+		lblProyectoLogica.setVisible(false);
+		lblAtomos.setVisible(false);
+		lblOperadores.setVisible(false);
+		lblComandos.setVisible(false);
+		btnVaciar.setVisible(false);
+		btnEliminar.setVisible(false);
+		btnAgregar.setVisible(false);
+	}
 	
+	//Oculta los elementos del panel
+	private void mostrarPanel() {
+		table.setVisible(true);
+		lblListaDeFormulas.setVisible(true);
+		lblArea.setVisible(true);
+		btnResolver.setVisible(true);
+		txtFormula.setVisible(true);
+		lblProyectoLogica.setVisible(true);
+		lblAtomos.setVisible(true);
+		lblOperadores.setVisible(true);
+		lblComandos.setVisible(true);
+		btnVaciar.setVisible(true);
+		btnEliminar.setVisible(true);
+		btnAgregar.setVisible(true);
+	}
+
 	/**
 	  * Agrega a la formula nuevas cadenas en una posicion indicada
 	  * @param String formula  
@@ -737,7 +838,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		txtFormula.setCaretPosition(pos);
 		txtFormula.requestFocus();
 	}
-
 
 	/**
 	  * Agrega los atomos a las formulas
@@ -902,12 +1002,14 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		btnAgregar.setText("Add");
 		btnResolver.setText("Resolve");
 		lblListaDeFormulas.setText("List of Formulas");
+		lblMetodoDeSatisfacibilidad.setText("SATISFACIBILITY BY RESOLUTION METHOD");
+		btnPanel.setText("EXIT");
 		
 	}
 	/**
 	 * Metodo que traduce a Español.
 	 */
-public void pasarEspañol () {
+	public void pasarEspañol () {
 		
 		lblArea.setText("Area Entrada");
 		lblProyectoLogica.setText("Lógica Proposicional");
@@ -919,6 +1021,8 @@ public void pasarEspañol () {
 		btnAgregar.setText("Agregar");
 		btnResolver.setText("Resolver");
 		lblListaDeFormulas.setText("Lista de Formulas");
+		lblMetodoDeSatisfacibilidad.setText("METODO DE SATISFACIBILIDAD POR RESOLUCION");
+		btnPanel.setText("SALIDA");
 		
 	}
 }

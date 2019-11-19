@@ -9,7 +9,23 @@ public class Logica {
 	public static final String DISYUNCION = "∨";
 	public static final String CONDICIONAL = "→";
 	public static final String EQUIVALENCIA = "↔";
-	
+	public static void main(String[] args) {
+		//( ( ( (r) ∨ (¬(s)) ) ∧ ( ( (r) ∨ (¬(s)) ) ∨ (s) ) ) ∧ ( (¬(r)) ∨ (¬(s)) ) ) ∧ ( ( (¬(r)) ∨ (¬(s)) ) ∨ (s) )
+		//¬((p)∧((q)→(r)))
+		//((¬(p))∨(q))∧((¬(r))∨(s))∧((p)∨(r))∧(¬(q))∧(¬(s))
+		String prueba = "((¬(p))∨(q))∧((¬(r))∨(s))∧(¬(s))∧((p)∨(r))∧(¬(q))";
+		System.out.println(prueba);
+		prueba = realizarFNC(prueba);
+		System.out.println(prueba);
+		
+		ArrayList<Clausula> clausulas = obtenerClausulas(prueba);
+		ArrayList<Clausula> c2 = obtenerClausulas(prueba);
+		System.out.println(clausulas);
+		resolucion(clausulas);
+		System.out.println(esSatisfacible(clausulas));
+		
+		System.out.println(c2);
+	}
 	/*********************************************************************************
 	                                    FNC
 	 *********************************************************************************/
@@ -304,7 +320,7 @@ public class Logica {
 	/********************************************************************************
 	                                  Resolucion
 	 ******************************************************************************/
-    private static void resolucion(ArrayList<Clausula> clausulas) {
+    public static void resolucion(ArrayList<Clausula> clausulas) {
 		 for(int j =0; j<clausulas.size(); j++){
 			for (int i = 0; i < clausulas.size(); i++) {
 				if (j< clausulas.size() && !(clausulas.get(j).estaUsada())) {
@@ -360,17 +376,36 @@ public class Logica {
 	 * @param String formula
 	 * @return un ArrayList de clausulas
 	 */
-	private static ArrayList<Clausula> obtenerClausulas(String formula) {
+	public static ArrayList<Clausula> obtenerClausulas(String formula) {
 		ArrayList<Clausula> aux = new ArrayList<>();
-		String[] arreglo = formula.trim().split(CONJUNCION);
-		for (int i = 0; i < arreglo.length; i++) {
+		String[] arreglo;
+		arreglo = formula.trim().split(CONJUNCION);
+		if (arreglo != null) {
+			for (int i = 0; i < arreglo.length; i++) {
+				ArrayList<Atomo> literales = new ArrayList<>();
+				Clausula clausula = new Clausula(false, literales, Clausula.PREMISA, i);
+				for (int j = 0; j < arreglo[i].length(); j++) {
+					char letra = arreglo[i].charAt(j);
+					if (esAtomo(letra)) {
+						Atomo p;
+						if (j-2 >= 0 && arreglo[i].charAt(j-2) == NEGACION.charAt(0)) {
+							p = new Atomo(true, letra+"");
+						} else {
+							p = new Atomo(false, letra+"");
+						}
+						literales.add(p);
+					}
+				}
+				aux.add(clausula);
+			}
+		}else {
 			ArrayList<Atomo> literales = new ArrayList<>();
-			Clausula clausula = new Clausula(false, literales, Clausula.PREMISA, i);
-			for (int j = 0; j < arreglo[i].length(); j++) {
-				char letra = arreglo[i].charAt(j);
+			Clausula clausula = new Clausula(false, literales, Clausula.PREMISA, 0);
+			for (int j = 0; j < formula.length(); j++) {
+				char letra = formula.charAt(j);
 				if (esAtomo(letra)) {
 					Atomo p;
-					if (j-2 >= 0 && arreglo[i].charAt(j-2) == NEGACION.charAt(0)) {
+					if (j-2 >= 0 && formula.charAt(j-2) == NEGACION.charAt(0)) {
 						p = new Atomo(true, letra+"");
 					} else {
 						p = new Atomo(false, letra+"");
@@ -379,8 +414,28 @@ public class Logica {
 				}
 			}
 			aux.add(clausula);
+			
 		}
+		
 		return aux;
+	}
+	
+	/**
+	 * Sacar una lista de clausulas atravez de una formula	
+	 * @param String formula
+	 * @return un ArrayList de clausulas
+	 */
+	public static void ingresarClausulas(ArrayList<Clausula> list,ArrayList<Clausula> ingresa) {
+		for (Clausula clausula : ingresa) {
+			list.add(clausula);
+		}
+	}
+	
+	public static boolean esSatisfacible(ArrayList<Clausula> list){
+		if(list.get(list.size()-1).estaVacia()){
+		return false;
+		}
+		return true;
 	}
 	
 	//Metodo para verificar si un caracter es un atomo

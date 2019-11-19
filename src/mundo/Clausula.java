@@ -66,6 +66,9 @@ public class Clausula {
 	public void setAtomo(Atomo p) {
 		literales.add(p);
 	}
+	public String getComentario() {
+		return comentario;
+	}
 	
 	public void setComentario(String comentario) {
 		this.comentario = comentario;
@@ -109,10 +112,21 @@ public class Clausula {
 		}
 		return null;
 	}
+	
+	public boolean estaVacia() {
+		if (literales.isEmpty()) {
+			return true;
+		}
+		return false;
+	}
 
 
 	public String toString() {
-		return literales + comentario;
+		String salida = "";
+		for (Atomo atomo : literales) {
+			salida+= atomo;
+		}
+		return salida;
 	}
 
 }
