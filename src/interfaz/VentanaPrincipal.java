@@ -67,7 +67,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	public static final String EQUIVALENCIA = "↔";
 	private UndoManager manager;
 	private int pos = 0;
-	private JPanel contentPane,contentPane2;
+	private JPanel contentPane;
 	private JButton btnNegacion;
 	private JTextField txtFormula;
 	private JButton btnP;
@@ -135,17 +135,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		setTitle("");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 650);
+		
 		//panel 1
 		contentPane = new JPanel();
 		contentPane.setToolTipText("\r\n");
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		//panel2
-		contentPane2 = new JPanel();
-		contentPane2.setToolTipText("\r\n");
-		contentPane2.setBorder(new EmptyBorder(0, 0, 0, 0));
-		setContentPane(contentPane2);
 		contentPane.setLayout(null);
 
 

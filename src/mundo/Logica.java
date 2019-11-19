@@ -9,27 +9,6 @@ public class Logica {
 	public static final String DISYUNCION = "∨";
 	public static final String CONDICIONAL = "→";
 	public static final String EQUIVALENCIA = "↔";
-	/**
-	 * Metodo para verificar si es un operador
-	 * @param caracter
-	 * @return
-	 */
-	
-	public static void main(String[] args) {
-		//( ( ( (r) ∨ (¬(s)) ) ∧ ( ( (r) ∨ (¬(s)) ) ∨ (s) ) ) ∧ ( (¬(r)) ∨ (¬(s)) ) ) ∧ ( ( (¬(r)) ∨ (¬(s)) ) ∨ (s) )
-		//¬((p)∧((q)→(r)))
-		//((¬(p))∨(q))∧((¬(r))∨(s))∧((p)∨(r))∧(¬(q))∧(¬(s))
-		String prueba = "((¬(p))∨(q))∧((¬(r))∨(s))∧(¬(s))∧((p)∨(r))∧(¬(q))";
-		System.out.println(prueba);
-		prueba = realizarFNC(prueba);
-		System.out.println(prueba);
-		
-		ArrayList<Clausula> clausulas = obtenerClausulas(prueba);
-		ArrayList<Clausula> c2 = obtenerClausulas(prueba);
-		System.out.println(clausulas);
-		resolucion(clausulas);
-		System.out.println(clausulas);
-	}
 	
 	/*********************************************************************************
 	                                    FNC
@@ -334,23 +313,6 @@ public class Logica {
 						clausulas.get(j).setEstado(true);
 						clausulas.get(i).setEstado(true);
 						clausulas.add(aux);
-					}
-				}
-			}
-		}
-	}
-    
-    
-    private static void resolucion(ArrayList<Clausula> clausulas,int j) {
-		if (j< clausulas.size()) {
-			for (int i = 0; i < clausulas.size(); i++) {
-				if (j< clausulas.size() && !(clausulas.get(j).estaUsada())) {
-					if (i!=j && tienenParComplementario(clausulas.get(j),clausulas.get(i))) {
-						Clausula aux = comprobarRes(clausulas.get(j),clausulas.get(i),clausulas.size());
-						clausulas.get(j).setEstado(true);
-						clausulas.get(i).setEstado(true);
-						clausulas.add(aux);
-						resolucion(clausulas, j+1);
 					}
 				}
 			}
