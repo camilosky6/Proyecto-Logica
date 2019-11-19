@@ -91,12 +91,10 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 
 	private ArrayList<String> listaFormulas;
-<<<<<<< HEAD
-=======
+
 	private JScrollPane scrollPane;
 	
 
->>>>>>> master
 	private DefaultTableModel modelotabla = new DefaultTableModel();
 	private JLabel lblProyectoLogica;
 	private JLabel lblComandos;
@@ -482,14 +480,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		fondoComandos.setBounds(12, 13, 946, 220);
 		panel.add(fondoComandos);
 		fondoComandos.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
-<<<<<<< HEAD
-=======
+
 
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 13, 948, 220);
 		panel.add(scrollPane);
-
->>>>>>> master
 
 		JLabel fondo = new JLabel("");
 		fondo.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
