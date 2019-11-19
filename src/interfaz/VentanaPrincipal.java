@@ -37,7 +37,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JTable;
 import java.awt.Font;
 import java.awt.ScrollPane;
-
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -46,11 +45,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Vector;
-
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
-
 import excepciones.ContinuasException;
 import excepciones.ParentesisException;
 import excepciones.ParentesisVacioException;
@@ -59,17 +56,10 @@ import mundo.Validaciones;
 
 public class VentanaPrincipal extends JFrame implements ActionListener {
 
-
 	/**
-	 * 
+	 * @author Daniel Loaiza Camilo Quiceno Diana Montoya
 	 */
 	private static final long serialVersionUID = 1L;
-
-	
-/**
- * @author Daniel Loaiza Camilo Quiceno Diana Montoya
- */
-
 	public static final String NEGACION = "¬";
 	public static final String CONJUNCION = "∧";
 	public static final String DISYUNCION = "∨";
