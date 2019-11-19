@@ -115,6 +115,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JButton btnPanel;
 	private JLabel lblMetodoDeSatisfacibilidad;
 	private JList jListaResolucion;
+	private JLabel lblSatisfacible;
+	private JLabel lblInsatisfacible;
 
 	/**
 	 * Launch the application.
@@ -342,6 +344,10 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		panel_1.setVisible(false);
 		panel_1.setLayout(null);
 		
+		jListaResolucion = new JList();
+		jListaResolucion.setBounds(69, 105, 891, 434);
+		panel_1.add(jListaResolucion);
+		
 		textConjuntoFormulas = new JTextField();
 		textConjuntoFormulas.setEditable(false);
 		textConjuntoFormulas.setBounds(69, 64, 891, 30);
@@ -365,9 +371,15 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		label_1.setBounds(0, 0, 982, 561);
 		panel_1.add(label_1);
 		
-		jListaResolucion = new JList();
-		jListaResolucion.setBounds(69, 105, 891, 434);
-		panel_1.add(jListaResolucion);
+		lblSatisfacible = new JLabel("SATISFACIBLE");
+		lblSatisfacible.setVisible(false);
+		lblSatisfacible.setBounds(60, 216, 46, 14);
+		panel_1.add(lblSatisfacible);
+		
+		lblInsatisfacible = new JLabel("INSATISFACIBLE");
+		lblInsatisfacible.setVisible(false);
+		lblInsatisfacible.setBounds(116, 216, 46, 14);
+		panel_1.add(lblInsatisfacible);
 
 		panel = new JPanel();
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -712,6 +724,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			String salida = ((i+1)+"  "+listaClausulas.get(i)+ "   "+ listaClausulas.get(i).getComentario());
 			modelo.addElement(salida);	
 		}
+		if (Logica.esSatisfacible(listaClausulas)) {
+			modelo.addElement(lblSatisfacible.getText());
+		}else {
+			modelo.addElement(lblInsatisfacible.getText());
+		}
 	}
 
 	//Oculta los elementos del panel
@@ -1004,6 +1021,8 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		lblListaDeFormulas.setText("List of Formulas");
 		lblMetodoDeSatisfacibilidad.setText("SATISFACIBILITY BY RESOLUTION METHOD");
 		btnPanel.setText("EXIT");
+		lblSatisfacible.setText("SATISFACTORY");
+		lblInsatisfacible.setText("UNSATISFACTORY");
 		
 	}
 	/**
@@ -1023,6 +1042,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		lblListaDeFormulas.setText("Lista de Formulas");
 		lblMetodoDeSatisfacibilidad.setText("METODO DE SATISFACIBILIDAD POR RESOLUCION");
 		btnPanel.setText("SALIDA");
-		
+		lblSatisfacible.setText("SATISFACIBLE");
+		lblInsatisfacible.setText("INSATISFACIBLE");		
 	}
 }

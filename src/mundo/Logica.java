@@ -426,13 +426,14 @@ public class Logica {
 	 * @return un ArrayList de clausulas
 	 */
 	public static void ingresarClausulas(ArrayList<Clausula> list,ArrayList<Clausula> ingresa) {
-		for (Clausula clausula : ingresa) {
-			list.add(clausula);
+		for (int i = 0; i < ingresa.size(); i++) {
+			ingresa.get(i).setPosicion((list.size()));
+			list.add(ingresa.get(i));
 		}
 	}
 	
 	public static boolean esSatisfacible(ArrayList<Clausula> list){
-		if(list.get(list.size()-1).estaVacia()){
+		if((list.size()-1) >=0 &&list.get(list.size()-1).estaVacia()){
 		return false;
 		}
 		return true;

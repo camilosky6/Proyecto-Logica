@@ -119,6 +119,9 @@ public class Clausula {
 		}
 		return false;
 	}
+	public void setPosicion(int n) {
+		posicion = n;
+	}
 
 
 	public String toString() {
