@@ -59,11 +59,6 @@ public class Validaciones {
 		return true;
 	}
 
-	public static boolean isAtomo() {
-
-		return false;
-	}
-
 	public static void verificarPremisa(String formula)
 			throws ContinuasException, PremisaException, ParentesisVacioException {
 

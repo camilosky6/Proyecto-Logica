@@ -17,7 +17,9 @@ public class Logica {
 	
 	public static void main(String[] args) {
 		//( ( ( (r) ∨ (¬(s)) ) ∧ ( ( (r) ∨ (¬(s)) ) ∨ (s) ) ) ∧ ( (¬(r)) ∨ (¬(s)) ) ) ∧ ( ( (¬(r)) ∨ (¬(s)) ) ∨ (s) )
-		String prueba = "¬((p)∧((q)→(r)))";
+		//¬((p)∧((q)→(r)))
+		//((¬(p))∨(q))∧((¬(r))∨(s))∧((p)∨(r))∧(¬(q))∧(¬(s))
+		String prueba = "((¬(p))∨(q))∧((¬(r))∨(s))∧(¬(s))∧((p)∨(r))∧(¬(q))";
 		System.out.println(prueba);
 		prueba = realizarFNC(prueba);
 		System.out.println(prueba);
@@ -31,13 +33,7 @@ public class Logica {
 		resolucion(c2, 0);
 		System.out.println(c2);
 	}
-
-	public boolean esOperador(char caracter) {
-		if (caracter == '¬' || caracter == '∨' || caracter == '∧' || caracter == '→' || caracter == '↔') {
-			return true;
-		}
-		return false;
-	}
+	
 	/*********************************************************************************
 	                                    FNC
 	 *********************************************************************************/
@@ -347,6 +343,7 @@ public class Logica {
 		}
 	}
     
+    
     private static void resolucion(ArrayList<Clausula> clausulas,int j) {
 		if (j< clausulas.size()) {
 			for (int i = 0; i < clausulas.size(); i++) {
@@ -363,6 +360,7 @@ public class Logica {
 		}
 	}
 	
+    //Metodo que genera la Clausula resultado de 2 formulas
 	private static Clausula comprobarRes(Clausula token, Clausula token2,int pos) {
 		String p = obtenerParComplementario(token, token2);
 		ArrayList<Atomo> aux = new ArrayList<>();
@@ -371,12 +369,12 @@ public class Logica {
 		token2.darAtomos(salida,p);
 		System.out.println(salida);
 		//TODO: modificar posicion despues, ver si es util o no
-		salida.esResolucionDe(p, token.getPosicion(), token2.getPosicion());
+		salida.esResolucionDe(p, token.getPosicion()+1, token2.getPosicion()+1);
 		System.out.println(salida);
 		return salida;
 	}
 
-
+	//Metodo que verifica si 2 clausulas tienen par complementario
 	private static boolean tienenParComplementario(Clausula token, Clausula token2) {
 		if (!token.estaUsada() && !token2.estaUsada()) {
 			for (int i = 0; i < token.getLiterales().size(); i++) {
@@ -388,6 +386,7 @@ public class Logica {
 		return false;
 	}
 	
+	//Metodo que devuelve el atomo complementario de dos formulas
 	private static String obtenerParComplementario(Clausula token, Clausula token2) {
 		for (int i = 0; i < token.getLiterales().size(); i++) {
 			if (token2.esParComplementarioDe(token.getLiterales().get(i))) {
@@ -398,9 +397,9 @@ public class Logica {
 	}
 
 	/**
-	 * Sacar clausales de la formula	
-	 * @param formula
-	 * @return
+	 * Sacar una lista de clausulas atravez de una formula	
+	 * @param String formula
+	 * @return un ArrayList de clausulas
 	 */
 	private static ArrayList<Clausula> obtenerClausulas(String formula) {
 		ArrayList<Clausula> aux = new ArrayList<>();
@@ -425,6 +424,7 @@ public class Logica {
 		return aux;
 	}
 	
+	//Metodo para verificar si un caracter es un atomo
 	private static boolean esAtomo(char p) {
 		if (p>96 && p<123) {
 			return true;

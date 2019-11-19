@@ -91,9 +91,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 
 	private ArrayList<String> listaFormulas;
+<<<<<<< HEAD
+=======
 	private JScrollPane scrollPane;
 	
 
+>>>>>>> master
 	private DefaultTableModel modelotabla = new DefaultTableModel();
 	private JLabel lblProyectoLogica;
 	private JLabel lblComandos;
@@ -382,14 +385,14 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		btnNegacion.addActionListener(this);
 		panel.add(btnNegacion);
 
-		btnO = new JButton("v");
+		btnO = new JButton("∨");
 		btnO.setForeground(new Color(100, 149, 237));
 		btnO.setFont(new Font("Tahoma", Font.PLAIN, 22));
 		btnO.addActionListener(this);
 		btnO.setBounds(640, 49, 70, 35);
 		panel.add(btnO);
 
-		btnY = new JButton("");
+		btnY = new JButton("∧");
 		btnY.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/back.png")));
 		btnY.setSelectedIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/back.png")));
 		btnY.addActionListener(this);
@@ -479,11 +482,14 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		fondoComandos.setBounds(12, 13, 946, 220);
 		panel.add(fondoComandos);
 		fondoComandos.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
+<<<<<<< HEAD
+=======
 
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 13, 948, 220);
 		panel.add(scrollPane);
 
+>>>>>>> master
 
 		JLabel fondo = new JLabel("");
 		fondo.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
