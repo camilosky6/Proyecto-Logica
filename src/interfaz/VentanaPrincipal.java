@@ -497,6 +497,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		scrollPane.setBounds(10, 13, 948, 220);
 		panel.add(scrollPane);
 
+
 		JLabel fondo = new JLabel("");
 		fondo.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
 		fondo.setBounds(0, 42, 982, 561);
@@ -850,7 +851,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	public void abrirPDF() throws IOException {
 		File file = new File("");
 		String helper = file.getAbsolutePath() + "\\src\\";
-		String currentDir = helper + "MANUAL DE USUARIO-convertido.pdf";
+		String currentDir = helper + "MANUAL DE USUARIO";
 		Runtime.getRuntime().exec(" rundll32 url.dll, FileProtocolHandler " + currentDir);
 	}
 	 /**
