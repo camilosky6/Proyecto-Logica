@@ -57,7 +57,7 @@ import mundo.Validaciones;
 public class VentanaPrincipal extends JFrame implements ActionListener {
 
 	/**
-	 * @author Daniel Loaiza Camilo Quiceno Diana Montoya
+	 * @author Camilo Quiceno - Daniel Loaiza - Diana Montoya
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final String NEGACION = "¬";
@@ -67,7 +67,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	public static final String EQUIVALENCIA = "↔";
 	private UndoManager manager;
 	private int pos = 0;
-	private JPanel contentPane;
+	private JPanel contentPane,contentPane2;
 	private JButton btnNegacion;
 	private JTextField txtFormula;
 	private JButton btnP;
@@ -104,6 +104,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JLabel lblAtomos;
 	private JLabel lblOperadores;
 	private JLabel lblListaDeFormulas;
+	private JPanel panel;
 
 	/**
 	 * Launch the application.
@@ -134,10 +135,17 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		setTitle("");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 650);
+		//panel 1
 		contentPane = new JPanel();
 		contentPane.setToolTipText("\r\n");
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		//panel2
+		contentPane2 = new JPanel();
+		contentPane2.setToolTipText("\r\n");
+		contentPane2.setBorder(new EmptyBorder(0, 0, 0, 0));
+		setContentPane(contentPane2);
 		contentPane.setLayout(null);
 
 
@@ -323,7 +331,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		lblLinea.setBounds(0, 0, 982, 41);
 		contentPane.add(lblLinea);
 
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel.setBounds(12, 153, 970, 246);
 		contentPane.add(panel);
@@ -493,7 +501,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 448, 958, 142);
 		contentPane.add(scrollPane);
-		
 
 	}
 	/**

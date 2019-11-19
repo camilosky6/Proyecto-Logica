@@ -29,9 +29,6 @@ public class Logica {
 		System.out.println(clausulas);
 		resolucion(clausulas);
 		System.out.println(clausulas);
-		
-		resolucion(c2, 0);
-		System.out.println(c2);
 	}
 	
 	/*********************************************************************************
