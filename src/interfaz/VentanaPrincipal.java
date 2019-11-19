@@ -96,6 +96,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 	private DefaultTableModel modelotabla = new DefaultTableModel();
 	private JLabel lblProyectoLogica;
+	private JLabel lblComandos;
+	private JLabel lblArea;
+	private JLabel Español;
+	private JLabel Ingles;
+	private JLabel lblAtomos;
+	private JLabel lblOperadores;
+	private JLabel lblListaDeFormulas;
 
 	/**
 	 * Launch the application.
@@ -123,7 +130,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 		setUndecorated(false);
 		setAutoRequestFocus(false);
-		setTitle("Logica");
+		setTitle("");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 650);
 		contentPane = new JPanel();
@@ -135,6 +142,17 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 		lblProyectoLogica = new JLabel("Proyecto Logica");
 		lblProyectoLogica.setFont(new Font("Tahoma", Font.BOLD, 20));
+		
+		Ingles = new JLabel("");
+		Ingles.setHorizontalAlignment(SwingConstants.CENTER);
+		Ingles.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/united-kingdom.png")));
+		Ingles.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent arg0) {
+				pasarIngles();
+			}
+		});
+		Ingles.setBounds(830, 0, 53, 41);
+		contentPane.add(Ingles);
 
 		
 		lblProyectoLogica = new JLabel("Lógica Proposicional ");
@@ -143,8 +161,19 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		lblProyectoLogica.setForeground(new Color(255, 255, 255));
 		lblProyectoLogica.setBounds(12, 13, 244, 28);
 		contentPane.add(lblProyectoLogica);
+		
+		Español = new JLabel("");
+		Español.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/spain.png")));
+		Español.setHorizontalAlignment(SwingConstants.CENTER);
+		Español.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				pasarEspañol();
+			}
+		});
+		Español.setBounds(777, 0, 53, 41);
+		contentPane.add(Español);
 
-		JLabel lblListaDeFormulas = new JLabel("Lista de Formulas");
+		lblListaDeFormulas = new JLabel("Lista de Formulas");
 		lblListaDeFormulas.setForeground(new Color(100, 149, 237));
 		lblListaDeFormulas.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblListaDeFormulas.setHorizontalAlignment(SwingConstants.CENTER);
@@ -158,7 +187,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		txtFormula.setColumns(10);
 		txtFormula.addMouseListener(new MouseListener() {
 
-			@Override
+		
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
 
@@ -242,7 +271,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		txtFormula.getDocument().addUndoableEditListener(manager);
 		new JLabel("Area entrada");
 
-		JLabel lblArea = new JLabel("Area entrada");
+		lblArea = new JLabel("Area Entrada");
 		lblArea.setForeground(new Color(100, 149, 237));
 		lblArea.setFont(new Font("Tahoma", Font.BOLD, 30));
 		lblArea.setBounds(420, 54, 220, 32);
@@ -257,7 +286,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		});
 		btnCerrar.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/cancel.png")));
 		btnCerrar.setHorizontalAlignment(SwingConstants.CENTER);
-		btnCerrar.setBounds(932, 0, 50, 41);
+		btnCerrar.setBounds(938, 0, 44, 41);
 		contentPane.add(btnCerrar);
 
 		JLabel btnInformacion = new JLabel("");
@@ -273,7 +302,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		});
 		btnInformacion.setHorizontalAlignment(SwingConstants.CENTER);
 		btnInformacion.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/info.png")));
-		btnInformacion.setBounds(882, 0, 56, 41);
+		btnInformacion.setBounds(882, 0, 44, 41);
 		contentPane.add(btnInformacion);
 
 		table = new JTable();
@@ -299,26 +328,26 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		contentPane.add(panel);
 		panel.setLayout(null);
 
-		JLabel label_1 = new JLabel("Atomos");
-		label_1.setHorizontalAlignment(SwingConstants.CENTER);
-		label_1.setFont(new Font("Tahoma", Font.BOLD, 20));
-		label_1.setForeground(new Color(100, 149, 237));
-		label_1.setBounds(145, 13, 110, 23);
-		panel.add(label_1);
+		lblAtomos = new JLabel("Atomos");
+		lblAtomos.setHorizontalAlignment(SwingConstants.CENTER);
+		lblAtomos.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblAtomos.setForeground(new Color(100, 149, 237));
+		lblAtomos.setBounds(145, 13, 110, 23);
+		panel.add(lblAtomos);
 
-		JLabel lblOperadores = new JLabel("Operadores");
+		lblOperadores = new JLabel("Operadores");
 		lblOperadores.setHorizontalAlignment(SwingConstants.CENTER);
 		lblOperadores.setForeground(new Color(100, 149, 237));
 		lblOperadores.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblOperadores.setBounds(640, 13, 229, 23);
 		panel.add(lblOperadores);
 
-		JLabel label = new JLabel("Comandos");
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setForeground(new Color(100, 149, 237));
-		label.setFont(new Font("Tahoma", Font.BOLD, 20));
-		label.setBounds(420, 98, 124, 27);
-		panel.add(label);
+		lblComandos = new JLabel("Comandos");
+		lblComandos.setHorizontalAlignment(SwingConstants.CENTER);
+		lblComandos.setForeground(new Color(100, 149, 237));
+		lblComandos.setFont(new Font("Tahoma", Font.BOLD, 20));
+		lblComandos.setBounds(420, 98, 124, 27);
+		panel.add(lblComandos);
 
 		btnIzquierda = new JButton("");
 		btnIzquierda.addActionListener(this);
@@ -452,7 +481,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		fondoComandos.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(-51, -124, 948, 168);
+		scrollPane.setBounds(10, 13, 948, 220);
 		panel.add(scrollPane);
 
 
@@ -594,7 +623,6 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			pos = 0;
 
 		}
-
 	}
 	
 	
@@ -837,5 +865,41 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		}
 		
 	}
+
+
 }
+	/**
+	 * Metodo que traduce a ingles.
+	 */
+	public void pasarIngles () {
+		
+		lblArea.setText("Entry Area");
+		lblProyectoLogica.setText("Propositional Logic");
+		lblAtomos.setText("Atoms");
+		lblOperadores.setText("Operators");
+		lblComandos.setText("Commands");
+		btnVaciar.setText("Empty");
+		btnEliminar.setText("Delete");
+		btnAgregar.setText("Add");
+		btnResolver.setText("Resolve");
+		lblListaDeFormulas.setText("List of Formulas");
+		
+	}
+	/**
+	 * Metodo que traduce a Español.
+	 */
+public void pasarEspañol () {
+		
+		lblArea.setText("Area Entrada");
+		lblProyectoLogica.setText("Lógica Proposicional");
+		lblAtomos.setText("Atomos");
+		lblOperadores.setText("Operadores");
+		lblComandos.setText("Comandos");
+		btnVaciar.setText("Vaciar");
+		btnEliminar.setText("Eliminar");
+		btnAgregar.setText("Agregar");
+		btnResolver.setText("Resolver");
+		lblListaDeFormulas.setText("Lista de Formulas");
+		
+	}
 }
