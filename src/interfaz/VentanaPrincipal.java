@@ -49,6 +49,7 @@ import java.util.Vector;
 
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import javax.swing.border.LineBorder;
 
 import excepciones.ContinuasException;
 import excepciones.ParentesisException;
@@ -58,10 +59,17 @@ import mundo.Validaciones;
 
 public class VentanaPrincipal extends JFrame implements ActionListener {
 
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	
+/**
+ * @author Daniel Loaiza Camilo Quiceno Diana Montoya
+ */
+
 	public static final String NEGACION = "¬";
 	public static final String CONJUNCION = "∧";
 	public static final String DISYUNCION = "∨";
@@ -91,12 +99,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	private JButton btnO;
 	private JButton btnResolver;
 
-<<<<<<< Updated upstream
+
 	private ArrayList<String> listaFormulas;
 	private JScrollPane scrollPane;
-=======
-	private ArrayList<String>listaFormulas;
->>>>>>> Stashed changes
+	
+
 	private DefaultTableModel modelotabla = new DefaultTableModel();
 	private JLabel lblProyectoLogica;
 
@@ -121,6 +128,9 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 	 */
 	public VentanaPrincipal() {
 
+		setResizable(false);
+		
+
 		setUndecorated(false);
 		setAutoRequestFocus(false);
 		setTitle("Logica");
@@ -132,21 +142,23 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
+
 		lblProyectoLogica = new JLabel("Proyecto Logica");
 		lblProyectoLogica.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblProyectoLogica.setForeground(new Color(255, 255, 255));
-		lblProyectoLogica.setBounds(0, 13, 202, 28);
-		contentPane.add(lblProyectoLogica);
-<<<<<<< Updated upstream
 
-=======
 		
->>>>>>> Stashed changes
+		lblProyectoLogica = new JLabel("Lógica Proposicional ");
+		lblProyectoLogica.setFont(new Font("Tahoma", Font.BOLD, 22));
+
+		lblProyectoLogica.setForeground(new Color(255, 255, 255));
+		lblProyectoLogica.setBounds(12, 13, 244, 28);
+		contentPane.add(lblProyectoLogica);
+
 		JLabel lblListaDeFormulas = new JLabel("Lista de Formulas");
 		lblListaDeFormulas.setForeground(new Color(100, 149, 237));
 		lblListaDeFormulas.setFont(new Font("Tahoma", Font.BOLD, 20));
 		lblListaDeFormulas.setHorizontalAlignment(SwingConstants.CENTER);
-		lblListaDeFormulas.setBounds(211, 412, 590, 16);
+		lblListaDeFormulas.setBounds(197, 412, 590, 16);
 		contentPane.add(lblListaDeFormulas);
 		manager = new UndoManager();
 
@@ -255,7 +267,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		});
 		btnCerrar.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/cancel.png")));
 		btnCerrar.setHorizontalAlignment(SwingConstants.CENTER);
-		btnCerrar.setBounds(932, 0, 56, 41);
+		btnCerrar.setBounds(932, 0, 50, 41);
 		contentPane.add(btnCerrar);
 
 		JLabel btnInformacion = new JLabel("");
@@ -275,9 +287,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		contentPane.add(btnInformacion);
 
 		table = new JTable();
-		table.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		table.setBounds(12, 430, 976, 207);
 
+		table.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+
+		table.setBorder(new LineBorder(new Color(100, 149, 237), 2));
+		table.setBounds(12, 430, 958, 160);
 		contentPane.add(table);
 		modelotabla.addColumn("Lista Formulas");
 		table.setModel(modelotabla);
@@ -286,12 +300,12 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		lblLinea.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-azul-claro.jpg")));
 		lblLinea.setBackground(new Color(135, 206, 250));
 		lblLinea.setHorizontalAlignment(SwingConstants.CENTER);
-		lblLinea.setBounds(0, 0, 1000, 41);
+		lblLinea.setBounds(0, 0, 982, 41);
 		contentPane.add(lblLinea);
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel.setBounds(12, 153, 976, 246);
+		panel.setBounds(12, 153, 970, 246);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
@@ -443,24 +457,28 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		panel.add(btnResolver);
 
 		JLabel fondoComandos = new JLabel("");
-		fondoComandos.setBounds(12, 13, 953, 220);
+		fondoComandos.setBounds(12, 13, 946, 220);
 		panel.add(fondoComandos);
 		fondoComandos.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
-<<<<<<< Updated upstream
 
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(-51, -124, 948, 168);
 		panel.add(scrollPane);
-=======
->>>>>>> Stashed changes
+
 
 		JLabel fondo = new JLabel("");
 		fondo.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/imagenes/fondo-blanco.jpg")));
-		fondo.setBounds(0, 42, 1000, 630);
+		fondo.setBounds(0, 42, 982, 561);
 		contentPane.add(fondo);
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(12, 448, 958, 142);
+		contentPane.add(scrollPane);
+		
 
 	}
-
+	/**
+	 * Se llaman todas las acciones de los botones
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String formula = txtFormula.getText();
@@ -561,12 +579,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			txtFormula.setCaretPosition(posicionCaretSiguiente(formula, txtFormula.getCaretPosition()));
 			txtFormula.requestFocus();
 		}
-		if (e.getSource() == btnAtras) {
-			txtFormula.requestFocus();
-			Action deshacer = new Deshacer(manager);
-			deshacer.actionPerformed(e);
-
-		}
+//		if (e.getSource() == btnAtras) {
+//			txtFormula.requestFocus();
+//			
+//			Action deshacer = new Deshacer(manager);
+//			deshacer.actionPerformed(e);
+//
+//		}
 		if (e.getSource() == btnAgregar) {
 			try {
 				agregarFormula(formula);
@@ -575,11 +594,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 				mostrarError(e1.getMessage());
 			}
 		}
-		if (e.getSource() == btnAdelante) {
-			txtFormula.requestFocus();
-			Action rehacer = new Rehacer(manager);
-			rehacer.actionPerformed(e);
-		}
+//		if (e.getSource() == btnAdelante) {
+//			txtFormula.requestFocus();
+//			Action rehacer = new Rehacer(manager);
+//			rehacer.actionPerformed(e);
+//		}
 		if (e.getSource() == btnEliminar) {
 			txtFormula.setText("");
 			pos = 0;
@@ -587,9 +606,18 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		}
 
 	}
-
+	
+	
+	/**
+	  * Agrega a la formula nuevas cadenas en una posicion indicada
+	  * @param String formula  
+	  * es la formula que se introduce por el jtexfield
+	  * @param String ingreso 
+	  * indica cual es la cadena que se le agregara a la formula
+	  * @param int n
+	  * nos indica la posicion donde sera agregada la nueva cadena
+	  */
 	public String insertar(String formula, String ingreso, int n) throws ParentesisException {
-
 		if (formula.charAt(pos - 1) == '(' && formula.charAt(pos) == ')') {
 			String salida = formula.substring(0, n) + ingreso + formula.substring(n);
 			txtFormula.setCaretPosition(posicionCaretSiguiente(formula, n));
@@ -597,9 +625,14 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		} else {
 			throw new ParentesisException("El nuevo operador no se encuentra dentro de parentésis");
 		}
-
 	}
 
+	
+		/**
+	  * Inserta la negacion en la formula
+	  * @param String formula  
+	  * es la formula que se introduce por el jtexfield
+	  */	
 	public void insertarNegacion(String formula) throws ParentesisException {
 		String n = NEGACION + "()";
 		pos = txtFormula.getCaretPosition();
@@ -619,10 +652,14 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		// txtFormula.moveCaretPosition(pos);
 	}
 
-	public void insertarY(String formula) throws ParentesisException {
-		String n = " () " + CONJUNCION + " () ";
-		pos = txtFormula.getCaretPosition();
-
+	/**
+	  * Inserta la conjuncion a la formula
+	  * @param String formula  
+	  * es la formula que se introduce por el jtexfield
+	  */
+		public void insertarY(String formula) throws ParentesisException {
+			String n = " () " + CONJUNCION + " () ";
+			pos = txtFormula.getCaretPosition();
 		if (formula.equals("")) {
 
 			txtFormula.setText(n.trim());
@@ -639,6 +676,13 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		// txtFormula.moveCaretPosition(pos);
 	}
 
+
+/**
+  * Inserta la disyuncion a la formula 
+  * ()v()
+  * @param String formula  
+  * es la formula que se introduce por el jtexfield
+  */	
 	public void insertarO(String formula) throws ParentesisException {
 
 		String n = " () " + DISYUNCION + " () ";
@@ -657,24 +701,41 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		txtFormula.requestFocus();
 	}
 
-	public void insertarAtomo(String formula, String atomo) throws ParentesisException {
-		char[] n = txtFormula.getText().toCharArray();
-		pos = txtFormula.getCaretPosition();
-		if (formula.equals("")) {
 
-			txtFormula.setText(atomo);
-		} else if (n[pos - 1] == '(' && n[pos] == ')') {
-			txtFormula.setText(insertar(formula, atomo, txtFormula.getCaretPosition()));
-		} else {
-			throw new ParentesisException("El nuevo átomo no esta entre parentésis");
-		}
-		txtFormula.setCaretPosition(posicionCaretSiguiente(formula, pos) + 1);
-		txtFormula.requestFocus();
-	}
+	/**
+	  * Agrega los atomos a las formulas
+	  * @param String formula  
+	  * es la formula que se introduce por el jtexfield
+	  */
+			public void insertarAtomo(String formula, String atomo) throws ParentesisException {
+				char[] n = txtFormula.getText().toCharArray();
+				pos = txtFormula.getCaretPosition();
+				if (formula.equals("")) {
+    		
+					txtFormula.setText(atomo);
+				} else if (n[pos - 1] == '(' && n[pos] == ')') {
+					txtFormula.setText(insertar(formula, atomo, txtFormula.getCaretPosition()));
+				} else {
+					throw new ParentesisException("El nuevo átomo no esta entre parentésis");
+				}
+				txtFormula.setCaretPosition(posicionCaretSiguiente(formula, pos) + 1);
+				txtFormula.requestFocus();
+			}
 
-	public void insertarSiSoloSi(String formula) throws ParentesisException {
-		String n = " () " + EQUIVALENCIA + " () ";
-		pos = txtFormula.getCaretPosition();
+			
+
+
+	
+
+	/**
+	  * Inserta  el bicondicional en la formula
+	  * de forma ()<->()
+	  * @param String formula  
+	  * es la formula que se introduce por el jtexfield
+	  */
+			public void insertarSiSoloSi(String formula) throws ParentesisException {
+				String n = " () " + EQUIVALENCIA + " () ";
+				pos = txtFormula.getCaretPosition();
 		if (formula.equals("")) {
 
 			txtFormula.setText(n.trim());
@@ -691,9 +752,16 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 
 	}
 
-	public void insertarEntonces(String formula) throws ParentesisException {
-		String n = " () " + CONDICIONAL + " () ";
-		pos = txtFormula.getCaretPosition();
+	/**
+	  * Escribe el  condicional en la formula
+	  * con sus respectivos ()->()
+	  * @param String formula  
+	  * es la formula que se introduce por el jtexfield
+	  */
+			public void insertarEntonces(String formula) throws ParentesisException {
+				String n = " () " + CONDICIONAL + " () ";
+				pos = txtFormula.getCaretPosition();
+
 		if (formula.equals("")) {
 
 			txtFormula.setText(n.trim());
@@ -736,6 +804,11 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		}
 		return 0;
 	}
+	
+	/**
+	 * 
+	 * @throws IOException
+	 */
 
 	public void abrirPDF() throws IOException {
 		File file = new File("");
@@ -743,11 +816,25 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 		String currentDir = helper + "Impresión de página completa.pdf";
 		Runtime.getRuntime().exec(" rundll32 url.dll, FileProtocolHandler " + currentDir);
 	}
-
+	 /**
+	  * Captura la formula que esta en el cuadro de texto
+	  * la guarda en un arraylist
+	  * y posteriormente la carga en la tabla
+	  * @param String formula  
+	  * es la formula que se introduce por el jtexfield
+	  */
 	public void agregarFormula(String formula) throws ContinuasException, PremisaException, ParentesisVacioException {
-
+{
 		try {
 			Validaciones.verificarPremisa(formula);
+			listaFormulas.add(formula);
+			modelotabla.setRowCount(0);
+			for (int i = 0; i < listaFormulas.size(); i++) {
+				Object[] fila = { listaFormulas.get(i) };
+				modelotabla.addRow(fila);
+			}
+			txtFormula.setText("");
+			pos = 0;
 		} catch (ContinuasException e) {
 			// TODO Auto-generated catch block
 			throw new ContinuasException(e.getMessage());
@@ -758,13 +845,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
 			// TODO Auto-generated catch block
 			throw new ParentesisVacioException(e.getMessage());
 		}
-		listaFormulas.add(formula);
-		modelotabla.setRowCount(0);
-		for (int i = 0; i < listaFormulas.size(); i++) {
-			Object[] fila = { listaFormulas.get(i) };
-			modelotabla.addRow(fila);
-		}
-		txtFormula.setText("");
-		pos = 0;
+		
 	}
+}
 }
